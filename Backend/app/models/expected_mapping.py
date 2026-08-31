@@ -17,10 +17,10 @@ class ExpectedMapping(Base):
         nullable=False,
     )
 
-    function_id: Mapped[str] = mapped_column(
-        ForeignKey("functions.function_id"),
-        nullable=False,
-    )
+    function_record_id: Mapped[str] = mapped_column(
+    ForeignKey("functions.function_record_id"),
+    nullable=False,
+)
 
     data_type: Mapped[str] = mapped_column(
         String(100),

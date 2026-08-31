@@ -7,9 +7,15 @@ from app.models.base import Base
 class Function(Base):
     __tablename__ = "functions"
 
+    function_record_id: Mapped[str] = mapped_column(
+        String(150),
+        primary_key=True,
+    )
+
     function_id: Mapped[str] = mapped_column(
         String(100),
-        primary_key=True,
+        nullable=False,
+        index=True,
     )
 
     application_id: Mapped[str] = mapped_column(
