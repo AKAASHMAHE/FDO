@@ -14,3 +14,10 @@ class AnalysisResultResponse(BaseModel):
     fdo_status: str
     decision_reason: str
     decision_confidence: float | None
+
+    expected_necessity: str | None = None
+    expected_purpose: str | None = None
+    declared_data_type: str | None = None
+    declared_purpose: str | None = None
+    explanation: str | None = None
+    evidence_available: bool | None = None

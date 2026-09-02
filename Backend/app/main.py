@@ -8,6 +8,9 @@ from app.models.function import Function
 
 from app.services.analysis_report_service import build_analysis_report
 from uuid import uuid4
+from app.services.rich_report_service import (
+    build_rich_analysis_report,
+)
 from app.services.application_service import (
     get_all_applications,
     get_application,
@@ -36,7 +39,9 @@ from app.schemas.policy_extraction import (
     PolicyEvidenceResponse,
     PolicyExtractionResponse,
 )
-
+from app.schemas.rich_report import (
+    RichAnalysisReportResponse,
+)
 from app.services.policy_extraction_service import (
     extract_policy_evidence,
 )
@@ -305,6 +310,57 @@ def get_analysis_results_endpoint(
     return get_analysis_results(
         db,
         analysis_id,
+    )
+@app.get(
+    "/api/v1/analysis/{analysis_id}/report",
+    response_model=RichAnalysisReportResponse,
+)
+def get_analysis_report_endpoint(
+    analysis_id: str,
+    db: Session = Depends(get_db),
+):
+    report = build_rich_analysis_report(
+        db,
+        analysis_id,
+    )
+
+    if report is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Analysis not found: {analysis_id}",
+        )
+
+    return report
+@app.get(
+    "/api/v1/analysis/{analysis_id}",
+    response_model=AnalysisReportResponse,
+)
+def get_analysis_endpoint(
+    analysis_id: str,
+    db: Session = Depends(get_db),
+):
+    report = build_analysis_report(
+        db,
+        analysis_id,
+    )
+
+    if report is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Analysis not found: {analysis_id}",
+        )
+
+    return AnalysisReportResponse(
+        analysis_id=report.analysis_id,
+        application_id=report.application_id,
+        policy_id=report.policy_id,
+        analysis_status=report.analysis_status,
+        total_mappings=report.total_mappings,
+        fdo_count=report.fdo_count,
+        not_fdo_count=report.not_fdo_count,
+        ambiguous_count=report.ambiguous_count,
+        comparisons=report.comparisons,
+        fdo_results=report.fdo_results,
     )
 @app.get(
     "/api/v1/analyses/{analysis_id}",

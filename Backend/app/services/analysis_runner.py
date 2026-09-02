@@ -29,6 +29,9 @@ from app.services.fdo_decision_service import (
     FDODecisionInput,
     evaluate_fdo_decision,
 )
+from app.services.explanation_service import (
+    save_explanation,
+)
 
 from app.services.result_service import (
     save_fdo_result,
@@ -189,13 +192,19 @@ def run_analysis(
                 comparison=comparison,
             )
 
-            save_fdo_result(
+            fdo_result = save_fdo_result(
                 session,
                 comparison_id=(
                     comparison_record.comparison_id
                 ),
                 decision=decision,
             )
+
+            save_explanation(
+            session,
+            result_id=fdo_result.result_id,
+            decision=decision,
+        )
 
             analysis.total_mappings += 1
 
