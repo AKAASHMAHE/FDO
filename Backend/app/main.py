@@ -11,6 +11,9 @@ from uuid import uuid4
 from app.services.rich_report_service import (
     build_rich_analysis_report,
 )
+from app.services.policy_ingestion_service import (
+    create_runtime_policy,
+)
 from app.services.application_service import (
     get_all_applications,
     get_application,
@@ -49,6 +52,9 @@ from app.services.policy_extraction_service import (
 from app.services.expected_mapping_service import (
     get_expected_mappings_by_application,
     get_expected_mapping,
+)
+from app.services.policy_ingestion_service import (
+    create_runtime_policy,
 )
 app = FastAPI(
     title=settings.app_name,
@@ -241,10 +247,37 @@ def analyze_endpoint(
     )
 
     try:
+        # ---------------------------------------------------------
+        # 1. Extract policy evidence using AI
+        # ---------------------------------------------------------
+
+        evidence = extract_policy_evidence(
+            request.policy_text,
+            request.application_name,
+        )
+
+        # ---------------------------------------------------------
+        # 2. Create runtime policy + evidence records
+        # ---------------------------------------------------------
+
+        runtime_policy = create_runtime_policy(
+            db,
+            application_id=application.application_id,
+            policy_text=request.policy_text,
+            policy_source=request.policy_source,
+            evidence=evidence,
+            analysis_id=analysis_id,
+        )
+
+        # ---------------------------------------------------------
+        # 3. Run deterministic FDO analysis on runtime policy
+        # ---------------------------------------------------------
+
         run_analysis(
             db,
             analysis_id,
             application.application_id,
+            policy_id=runtime_policy.policy_id,
         )
 
         db.commit()
@@ -264,6 +297,10 @@ def analyze_endpoint(
             status_code=500,
             detail="Analysis execution failed.",
         )
+
+    # -------------------------------------------------------------
+    # 4. Build final analysis report
+    # -------------------------------------------------------------
 
     report = build_analysis_report(
         db,

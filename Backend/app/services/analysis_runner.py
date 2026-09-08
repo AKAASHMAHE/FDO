@@ -1,9 +1,9 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.analysis import Analysis
+from app.models.policy_document import PolicyDocument
 
 from app.services.application_service import (
     get_application,
@@ -29,6 +29,7 @@ from app.services.fdo_decision_service import (
     FDODecisionInput,
     evaluate_fdo_decision,
 )
+
 from app.services.explanation_service import (
     save_explanation,
 )
@@ -46,6 +47,7 @@ def run_analysis(
     session: Session,
     analysis_id: str,
     application_id: str,
+    policy_id: str | None = None,
 ) -> Analysis:
 
     existing = session.get(
@@ -77,17 +79,35 @@ def run_analysis(
         # 2. Load policy
         # ---------------------------------------------------------
 
-        policies = get_policy_documents_by_application(
-            session,
-            application_id,
-        )
-
-        if not policies:
-            raise ValueError(
-                f"No policy document found for: {application_id}"
+        if policy_id:
+            policy = session.get(
+                PolicyDocument,
+                policy_id,
             )
 
-        policy = policies[0]
+            if policy is None:
+                raise ValueError(
+                    f"Policy not found: {policy_id}"
+                )
+
+            if policy.application_id != application_id:
+                raise ValueError(
+                    f"Policy {policy_id} does not belong to "
+                    f"application {application_id}"
+                )
+
+        else:
+            policies = get_policy_documents_by_application(
+                session,
+                application_id,
+            )
+
+            if not policies:
+                raise ValueError(
+                    f"No policy document found for: {application_id}"
+                )
+
+            policy = policies[0]
 
         # ---------------------------------------------------------
         # 3. Create analysis
@@ -201,10 +221,10 @@ def run_analysis(
             )
 
             save_explanation(
-            session,
-            result_id=fdo_result.result_id,
-            decision=decision,
-        )
+                session,
+                result_id=fdo_result.result_id,
+                decision=decision,
+            )
 
             analysis.total_mappings += 1
 
