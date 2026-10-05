@@ -188,4 +188,30 @@ FDO_OBJECT_PROPERTIES = {
         range=User,
         description="Connects an application to its user context.",
     ),
+    "expectedDataType": ObjectProperty(
+    name="expectedDataType",
+    domain=ExpectedData,
+    range=PersonalData,
+    description="Connects expected data to the semantic personal data concept it represents.",
+),
+
+"declaredDataType": ObjectProperty(
+    name="declaredDataType",
+    domain=DeclaredData,
+    range=PersonalData,
+    description="Connects declared data to the semantic personal data concept it represents.",
+),
+"expectedDataPurpose": ObjectProperty(
+    name="expectedDataPurpose",
+    domain=ExpectedData,
+    range=Purpose,
+    description="Connects expected data to its semantic processing purpose.",
+),
+
+"declaredDataPurpose": ObjectProperty(
+    name="declaredDataPurpose",
+    domain=DeclaredData,
+    range=Purpose,
+    description="Connects declared data to its semantic processing purpose.",
+),
 }
