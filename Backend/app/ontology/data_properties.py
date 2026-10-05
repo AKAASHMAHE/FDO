@@ -33,6 +33,7 @@ from .classes import (
     DeclaredData,
     ExpectedData,
     Function,
+    FDOEntity,
     Justification,
     Overreach,
     PersonalData,
@@ -52,7 +53,7 @@ FDO_DATA_PROPERTIES = {
 
     "id": DataProperty(
         name="id",
-        domain=Application,
+        domain=FDOEntity,
         datatype="string",
         description="Unique identifier of an ontology entity.",
     ),
@@ -66,7 +67,7 @@ FDO_DATA_PROPERTIES = {
 
     "description": DataProperty(
         name="description",
-        domain=Application,
+        domain=FDOEntity,
         datatype="string",
         description="Human-readable description of an ontology entity.",
     ),

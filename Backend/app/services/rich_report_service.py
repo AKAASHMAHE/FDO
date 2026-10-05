@@ -9,7 +9,10 @@ from app.models.fdo_result import FDOResult
 from app.models.function import Function
 from app.models.policy_evidence import PolicyEvidence
 from app.models.explanation import Explanation
-
+from app.models.semantic_fdo_result import SemanticFDOResult
+from app.ontology.semantic_explanation_service import (
+    build_semantic_explanation,
+)
 
 def build_rich_analysis_report(
     session: Session,
@@ -78,6 +81,16 @@ def build_rich_analysis_report(
     rows = session.execute(statement).all()
 
     results = []
+    semantic_results = (
+    session.query(SemanticFDOResult)
+    .filter(
+        SemanticFDOResult.analysis_id == analysis_id
+    )
+    .order_by(
+        SemanticFDOResult.semantic_result_id
+    )
+    .all()
+)
 
     for (
         comparison,
@@ -163,7 +176,57 @@ def build_rich_analysis_report(
                 ),
             }
         )
+    semantic_report_results = []
 
+    for semantic_result in semantic_results:
+        semantic_report_results.append(
+        {
+            "semantic_result_id": (
+                semantic_result.semantic_result_id
+            ),
+            "application_id": (
+                semantic_result.application_id
+            ),
+            "application": (
+                semantic_result.application
+            ),
+            "function": (
+                semantic_result.function
+            ),
+            "expected_data": (
+                semantic_result.expected_data
+            ),
+            "declared_data": (
+                semantic_result.declared_data
+            ),
+            "expected_type": (
+                semantic_result.expected_type
+            ),
+            "declared_type": (
+                semantic_result.declared_type
+            ),
+            "expected_purpose": (
+                semantic_result.expected_purpose
+            ),
+            "declared_purpose": (
+                semantic_result.declared_purpose
+            ),
+            "fdo_status": (
+                semantic_result.fdo_status
+            ),
+            "confidence": (
+                semantic_result.confidence
+            ),
+            "reason": (
+                semantic_result.reason
+            ),
+            "explanation": (
+                build_semantic_explanation(
+                    semantic_result
+                )
+            ),
+        }
+    )
     return {
         "analysis_id": analysis.analysis_id,
 
@@ -184,4 +247,5 @@ def build_rich_analysis_report(
         },
 
         "results": results,
+        "semantic_results": semantic_report_results,
     }

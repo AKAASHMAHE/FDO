@@ -713,7 +713,66 @@ def connect_overreach_risk(
             risk_uri(risk_id),
         )
     )
+def _convert_application_record(record):
+    if not isinstance(record, dict):
+        return record
 
+    if "application_id" in record:
+        return application_from_record(record)
+
+    return Application(
+        id=str(record.get("id", "")),
+        name=str(record.get("name", "")),
+        category=record.get("category"),
+        description=record.get("description"),
+    )
+
+
+def _convert_function_record(record):
+    if not isinstance(record, dict):
+        return record
+
+    if "function_record_id" in record:
+        return function_from_record(record)
+
+    return Function(
+        id=str(record.get("id", "")),
+        name=str(record.get("name", "")),
+        description=record.get("description"),
+    )
+
+
+def _convert_expected_data_record(record):
+    if not isinstance(record, dict):
+        return record
+
+    if "expected_id" in record:
+        return expected_data_from_record(record)
+
+    return ExpectedData(
+        id=str(record.get("id", "")),
+        name=str(record.get("name", "")),
+        data_type=record.get("data_type"),
+        necessity=record.get("necessity"),
+        purpose=record.get("purpose"),
+    )
+
+
+def _convert_declared_data_record(record):
+    if not isinstance(record, dict):
+        return record
+
+    if "evidence_id" in record:
+        return declared_data_from_record(record)
+
+    return DeclaredData(
+        id=str(record.get("id", "")),
+        name=str(record.get("name", "")),
+        data_type=record.get("data_type"),
+        purpose=record.get("purpose"),
+        sharing=record.get("sharing"),
+        retention=record.get("retention"),
+    )
 
 # ============================================================
 # Graph Builder
@@ -732,9 +791,10 @@ def build_rdf_graph(
     """
     Build an RDF graph from FDO domain objects.
 
-    This function creates RDF individuals only.
-    Relationships are added separately through the
-    connection helper functions.
+    Supports both:
+    1. FDO domain objects
+    2. Legacy DB-shaped dictionaries
+    3. Actual ORM-shaped dictionaries
     """
 
     graph = Graph()
@@ -742,42 +802,42 @@ def build_rdf_graph(
     graph.bind("fdo", FDO)
 
     for application in applications or []:
-        if isinstance(application, dict):
-            application = application_from_record(application)
-
+        application = _convert_application_record(
+            application
+        )
         add_application(graph, application)
 
     for function in functions or []:
-        if isinstance(function, dict):
-            function = function_from_record(function)
-
+        function = _convert_function_record(
+            function
+        )
         add_function(graph, function)
 
     for expected in expected_data or []:
-        if isinstance(expected, dict):
-            expected = expected_data_from_record(expected)
-
+        expected = _convert_expected_data_record(
+            expected
+        )
         add_expected_data(graph, expected)
 
     for declared in declared_data or []:
-        if isinstance(declared, dict):
-            declared = declared_data_from_record(declared)
-
+        declared = _convert_declared_data_record(
+            declared
+        )
         add_declared_data(graph, declared)
 
-    for policy in policies:
+    for policy in policies or []:
         add_privacy_policy(graph, policy)
 
-    for clause in policy_clauses:
+    for clause in policy_clauses or []:
         add_policy_clause(graph, clause)
 
-    for finding in overreach_findings:
+    for finding in overreach_findings or []:
         add_overreach(graph, finding)
+
     for item in personal_data or []:
         add_personal_data(graph, item)
+
     return graph
-
-
 # ============================================================
 # Serialization
 # ============================================================

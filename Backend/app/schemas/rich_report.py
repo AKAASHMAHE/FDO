@@ -55,7 +55,26 @@ class RichAnalysisSummaryResponse(BaseModel):
     fdo: int
     not_fdo: int
     ambiguous: int
+class RichSemanticFDOResultResponse(BaseModel):
+    semantic_result_id: str
+    application_id: str
+    application: str
+    function: str
 
+    expected_data: str
+    declared_data: str
+
+    expected_type: str
+    declared_type: str
+
+    expected_purpose: str
+    declared_purpose: str
+
+    fdo_status: str
+    confidence: float | None = None
+    reason: str
+
+    explanation: str
 
 class RichAnalysisReportResponse(BaseModel):
     analysis_id: str
@@ -63,3 +82,5 @@ class RichAnalysisReportResponse(BaseModel):
     analysis_status: str
     summary: RichAnalysisSummaryResponse
     results: list[RichAnalysisResultResponse]
+    semantic_results: list[RichSemanticFDOResultResponse] = []
+

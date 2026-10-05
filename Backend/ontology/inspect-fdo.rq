@@ -1,0 +1,10 @@
+PREFIX fdo: <http://example.org/fdo#>
+
+SELECT ?x ?id
+WHERE {
+    ?x fdo:id ?id .
+    VALUES ?x {
+        <http://example.org/fdo#resource/expected-data/expected-001>
+        <http://example.org/fdo#resource/declared-data/declared-001>
+    }
+}

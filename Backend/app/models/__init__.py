@@ -8,7 +8,7 @@ from app.models.analysis import Analysis
 from app.models.comparison import Comparison
 from app.models.fdo_result import FDOResult
 from app.models.explanation import Explanation
-
+from app.models.semantic_fdo_result import SemanticFDOResult
 __all__ = [
     "Application",
     "Function",

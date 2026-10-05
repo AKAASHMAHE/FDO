@@ -1,0 +1,11 @@
+PREFIX fdo: <http://example.org/fdo#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?resource ?type
+WHERE {
+    ?resource rdf:type ?type .
+    FILTER(
+        STR(?resource) =
+        "http://example.org/fdo#resource/expected-data/expected-001"
+    )
+}

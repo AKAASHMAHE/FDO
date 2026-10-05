@@ -1,0 +1,28 @@
+@prefix fdo: <http://example.org/fdo#> .
+
+<http://example.org/fdo#resource/application/app-001> a fdo:Application ;
+    fdo:declaredData <http://example.org/fdo#resource/declared-data/declared-001> ;
+    fdo:id "app-001" ;
+    fdo:name "Navigation App" ;
+    fdo:performsFunction <http://example.org/fdo#resource/function/func-001> .
+
+<http://example.org/fdo#resource/declared-data/declared-001> a fdo:DeclaredData ;
+    fdo:dataType "precise_location" ;
+    fdo:declaredByApplication <http://example.org/fdo#resource/application/app-001> ;
+    fdo:id "declared-001" ;
+    fdo:name "Precise Location" ;
+    fdo:purpose "advertising" .
+
+<http://example.org/fdo#resource/expected-data/expected-001> a fdo:ExpectedData ;
+    fdo:dataType "location" ;
+    fdo:expectedForFunction <http://example.org/fdo#resource/function/func-001> ;
+    fdo:id "expected-001" ;
+    fdo:name "Location" ;
+    fdo:necessity "required" ;
+    fdo:purpose "navigation" .
+
+<http://example.org/fdo#resource/function/func-001> a fdo:Function ;
+    fdo:expectedData <http://example.org/fdo#resource/expected-data/expected-001> ;
+    fdo:id "func-001" ;
+    fdo:name "Navigation" .
+

@@ -26,7 +26,27 @@ class FDOResultResponse(BaseModel):
     decision_reason: str
     decision_confidence: float | None
     created_at: str
+class SemanticFDOResultResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
+    semantic_result_id: str
 
+    application_id: str
+    application: str
+    function: str
+
+    expected_data: str
+    declared_data: str
+
+    expected_type: str
+    declared_type: str
+
+    expected_purpose: str
+    declared_purpose: str
+
+    fdo_status: str
+    confidence: float | None
+    reason: str
 
 class AnalysisReportResponse(BaseModel):
     analysis_id: str
@@ -41,6 +61,7 @@ class AnalysisReportResponse(BaseModel):
 
     comparisons: list[ComparisonResponse]
     fdo_results: list[FDOResultResponse]
+    semantic_results: list[SemanticFDOResultResponse]=[]
 class ApplicationResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

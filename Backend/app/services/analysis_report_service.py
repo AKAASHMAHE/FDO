@@ -7,6 +7,9 @@ from app.services.analysis_service import (
     get_comparisons_by_analysis,
     get_fdo_results_by_analysis,
 )
+from app.ontology.semantic_result_repository import (
+    SemanticResultRepository,
+)
 
 
 @dataclass
@@ -23,6 +26,7 @@ class AnalysisReport:
 
     comparisons: list
     fdo_results: list
+    semantic_results: list
 
 
 def build_analysis_report(
@@ -48,6 +52,11 @@ def build_analysis_report(
         analysis_id,
     )
 
+    semantic_results = (
+        SemanticResultRepository(session)
+        .get_by_analysis_id(analysis_id)
+    )
+
     return AnalysisReport(
         analysis_id=analysis.analysis_id,
         application_id=analysis.application_id,
@@ -59,4 +68,5 @@ def build_analysis_report(
         ambiguous_count=analysis.ambiguous_count,
         comparisons=comparisons,
         fdo_results=fdo_results,
+        semantic_results=semantic_results,
     )

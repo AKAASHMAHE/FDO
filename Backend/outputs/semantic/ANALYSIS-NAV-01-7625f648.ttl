@@ -1,0 +1,59 @@
+@prefix fdo: <http://example.org/fdo#> .
+
+<http://example.org/fdo#resource/application/NAV-01> a fdo:Application ;
+    fdo:category "Navigation" ;
+    fdo:declaredData <http://example.org/fdo#resource/declared-data/AI-06d13993> ;
+    fdo:id "NAV-01" ;
+    fdo:name "Google Maps" ;
+    fdo:performsFunction <http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.SEARCH>,
+        <http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.TRAFFIC>,
+        <http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.TURNBYTURN> .
+
+<http://example.org/fdo#resource/declared-data/AI-06d13993> a fdo:DeclaredData ;
+    fdo:dataType "precise_location" ;
+    fdo:declaredByApplication <http://example.org/fdo#resource/application/NAV-01> ;
+    fdo:id "AI-06d13993" ;
+    fdo:name "precise_location" ;
+    fdo:purpose "advertising" ;
+    fdo:retention "30 days" ;
+    fdo:sharing "shared" .
+
+<http://example.org/fdo#resource/expected-data/EXP-015> a fdo:ExpectedData ;
+    fdo:dataType "DATA.LOCATION.PRECISE" ;
+    fdo:expectedForFunction <http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.TURNBYTURN> ;
+    fdo:id "EXP-015" ;
+    fdo:name "DATA.LOCATION.PRECISE" ;
+    fdo:necessity "L1_REQUIRED" ;
+    fdo:purpose "Route/navigation" .
+
+<http://example.org/fdo#resource/expected-data/EXP-016> a fdo:ExpectedData ;
+    fdo:dataType "DATA.LOCATION.PRECISE" ;
+    fdo:expectedForFunction <http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.TRAFFIC> ;
+    fdo:id "EXP-016" ;
+    fdo:name "DATA.LOCATION.PRECISE" ;
+    fdo:necessity "L1_REQUIRED" ;
+    fdo:purpose "Real-time traffic/navigation" .
+
+<http://example.org/fdo#resource/expected-data/EXP-017> a fdo:ExpectedData ;
+    fdo:dataType "DATA.LOCATION.APPROXIMATE" ;
+    fdo:expectedForFunction <http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.SEARCH> ;
+    fdo:id "EXP-017" ;
+    fdo:name "DATA.LOCATION.APPROXIMATE" ;
+    fdo:necessity "L2_SUPPORTIVE" ;
+    fdo:purpose "Search/localization" .
+
+<http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.SEARCH> a fdo:Function ;
+    fdo:expectedData <http://example.org/fdo#resource/expected-data/EXP-017> ;
+    fdo:id "NAV-01:FUNC.NAV.SEARCH" ;
+    fdo:name "Location search" .
+
+<http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.TRAFFIC> a fdo:Function ;
+    fdo:expectedData <http://example.org/fdo#resource/expected-data/EXP-016> ;
+    fdo:id "NAV-01:FUNC.NAV.TRAFFIC" ;
+    fdo:name "Traffic information" .
+
+<http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.TURNBYTURN> a fdo:Function ;
+    fdo:expectedData <http://example.org/fdo#resource/expected-data/EXP-015> ;
+    fdo:id "NAV-01:FUNC.NAV.TURNBYTURN" ;
+    fdo:name "Turn-by-turn navigation" .
+

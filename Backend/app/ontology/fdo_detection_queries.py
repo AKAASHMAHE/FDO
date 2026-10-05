@@ -6,6 +6,8 @@ FDO_DETECTION_QUERY = """
 PREFIX fdo: <http://example.org/fdo#>
 
 SELECT
+    ?application
+    ?function
     ?expectedData
     ?declaredData
     ?expectedType
@@ -13,14 +15,17 @@ SELECT
     ?expectedPurpose
     ?declaredPurpose
 WHERE {
-    ?expectedData a fdo:ExpectedData ;
-                  fdo:id ?dataId ;
-                  fdo:dataType ?expectedType ;
+    ?application a fdo:Application ;
+                 fdo:performsFunction ?function ;
+                 fdo:declaredData ?declaredData .
+
+    ?function a fdo:Function ;
+              fdo:expectedData ?expectedData .
+
+    ?expectedData fdo:dataType ?expectedType ;
                   fdo:purpose ?expectedPurpose .
 
-    ?declaredData a fdo:DeclaredData ;
-                  fdo:id ?dataId ;
-                  fdo:dataType ?declaredType ;
+    ?declaredData fdo:dataType ?declaredType ;
                   fdo:purpose ?declaredPurpose .
 
     FILTER (
@@ -30,7 +35,6 @@ WHERE {
     )
 }
 """
-
 
 SENSITIVE_DATA_QUERY = """
 PREFIX fdo: <http://example.org/fdo#>

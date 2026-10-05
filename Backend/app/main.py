@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-
+from pathlib import Path
 from app.config import settings
 from app.database import SessionLocal
 
@@ -56,6 +56,11 @@ from app.services.expected_mapping_service import (
 from app.services.policy_ingestion_service import (
     create_runtime_policy,
 )
+from app.ontology.semantic_result_repository import (
+    SemanticResultRepository,
+)
+from app.ontology.db_semantic_repository import DBSemanticRepository
+from app.ontology.db_semantic_result_service import DBSemanticResultService
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
@@ -274,11 +279,44 @@ def analyze_endpoint(
         # ---------------------------------------------------------
 
         run_analysis(
-            db,
-            analysis_id,
-            application.application_id,
-            policy_id=runtime_policy.policy_id,
-        )
+        db,
+        analysis_id,
+        application.application_id,
+        policy_id=runtime_policy.policy_id,
+    )
+
+    # ---------------------------------------------------------
+    # Semantic FDO analysis
+    # ---------------------------------------------------------
+
+        semantic_repository = DBSemanticRepository(db)
+
+        semantic_service = DBSemanticResultService(
+        semantic_repository
+    )
+
+        semantic_output_path = (
+        Path("outputs")
+        / "semantic"
+        / f"{analysis_id}.ttl"
+    )
+        semantic_results = semantic_service.analyze(
+    application_id=application.application_id,
+    policy_id=runtime_policy.policy_id,
+    output_path=semantic_output_path,
+)
+
+        semantic_repository = SemanticResultRepository(db)
+
+        semantic_repository.save_results(
+    analysis_id=analysis_id,
+    results=semantic_results,
+)
+        persisted_semantic_results = (
+    semantic_repository.get_by_analysis_id(
+        analysis_id
+    )
+)
 
         db.commit()
 
@@ -324,6 +362,7 @@ def analyze_endpoint(
         ambiguous_count=report.ambiguous_count,
         comparisons=report.comparisons,
         fdo_results=report.fdo_results,
+        semantic_results=persisted_semantic_results
     )
 @app.get(
     "/api/v1/analyses/{analysis_id}/results",
@@ -398,6 +437,7 @@ def get_analysis_endpoint(
         ambiguous_count=report.ambiguous_count,
         comparisons=report.comparisons,
         fdo_results=report.fdo_results,
+        semantic_results=report.semantic_results,
     )
 @app.get(
     "/api/v1/analyses/{analysis_id}",
@@ -429,6 +469,7 @@ def get_analysis_report(
         ambiguous_count=report.ambiguous_count,
         comparisons=report.comparisons,
         fdo_results=report.fdo_results,
+        semantic_results=report.semantic_results,
     )
 @app.post(
     "/api/v1/analyses",
@@ -490,4 +531,5 @@ def create_analysis_endpoint(
         ambiguous_count=report.ambiguous_count,
         comparisons=report.comparisons,
         fdo_results=report.fdo_results,
+        semantic_results=report.semantic_results,
     )
