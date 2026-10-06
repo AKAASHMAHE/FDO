@@ -359,6 +359,26 @@ def evaluate_purpose_compatibility(
 
     return "INCOMPATIBLE"
 
+
+def classify_purpose_compatibility(
+    expected_purpose: str | None,
+    declared_purpose: str | None,
+) -> str:
+    """
+    Canonical purpose compatibility helper shared by relational and
+    semantic decision paths.
+    """
+
+    result = evaluate_purpose_compatibility(
+        expected_purpose or "",
+        declared_purpose,
+    )
+
+    if result == "NO_EVIDENCE":
+        return "UNKNOWN"
+
+    return result
+
 def evaluate_functional_relationship(
     declared_evidence_id: str | None,
 ) -> str:

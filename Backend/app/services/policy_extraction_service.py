@@ -1,6 +1,9 @@
 import re
 from uuid import uuid4
 from app.services.ai_service import extract_policy_evidence_with_ai
+from app.services.evidence_validation_service import (
+    validate_policy_evidence,
+)
 
 def extract_policy_evidence(
     policy_text: str,
@@ -16,13 +19,17 @@ def extract_policy_evidence(
             application_name,
         )
 
-        if ai_evidence:
-            for item in ai_evidence:
+        validated_ai_evidence = validate_policy_evidence(
+            ai_evidence
+        )
+
+        if validated_ai_evidence:
+            for item in validated_ai_evidence:
                 item["evidence_id"] = (
                     f"AI-{uuid4().hex[:8]}"
                 )
 
-            return ai_evidence
+            return validated_ai_evidence
 
     except Exception:
         pass
@@ -81,4 +88,4 @@ def extract_policy_evidence(
             }
         )
 
-    return evidence
+    return validate_policy_evidence(evidence)

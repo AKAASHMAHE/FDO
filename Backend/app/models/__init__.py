@@ -20,4 +20,5 @@ __all__ = [
     "Comparison",
     "FDOResult",
     "Explanation",
+    "SemanticFDOResult",
 ]

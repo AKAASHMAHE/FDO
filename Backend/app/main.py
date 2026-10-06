@@ -2,7 +2,10 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pathlib import Path
 from app.config import settings
-from app.database import SessionLocal
+from app.database import (
+    SessionLocal,
+    ensure_sqlite_schema_compatibility,
+)
 from fastapi.middleware.cors import CORSMiddleware
 from app.models.function import Function
 
@@ -20,7 +23,7 @@ from app.services.application_service import (
     get_all_applications,
     get_application,
     get_application_readiness,
-    find_application_by_name_and_category,
+    get_or_create_application_for_analysis,
 )
 from app.services.function_service import (
     get_functions_by_application,
@@ -51,6 +54,12 @@ from app.schemas.rich_report import (
 )
 from app.services.policy_extraction_service import (
     extract_policy_evidence,
+)
+from app.services.policy_discovery_service import (
+    discover_privacy_policy,
+)
+from app.services.functional_baseline_service import (
+    ensure_functional_baseline,
 )
 
 from app.services.expected_mapping_service import (
@@ -91,6 +100,51 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.on_event("startup")
+def ensure_schema_on_startup():
+    ensure_sqlite_schema_compatibility()
+
+
+from app.schemas.analysis import (
+    AnalysisCreateRequest,
+    AnalysisReportResponse,
+    ApplicationResponse,
+    ApplicationReadinessResponse,
+    ApplicationDetailResponse,
+    ExpectedMappingsResponse,
+    AnalyzeRequest,
+    AnalysisHistoryResponse,
+    SemanticFDOResultResponse,
+)
+
+def _analysis_response(report):
+    semantic_results = [
+        SemanticFDOResultResponse.model_validate(r)
+        if not isinstance(r, SemanticFDOResultResponse)
+        else r
+        for r in (report.semantic_results or [])
+    ]
+    return AnalysisReportResponse(
+        analysis_id=report.analysis_id,
+        application_id=report.application_id,
+        policy_id=report.policy_id,
+        analysis_status=report.analysis_status,
+        total_mappings=report.total_mappings,
+        fdo_count=report.fdo_count,
+        not_fdo_count=report.not_fdo_count,
+        ambiguous_count=report.ambiguous_count,
+        comparisons=report.comparisons,
+        fdo_results=report.fdo_results,
+        semantic_results=semantic_results,
+        policy_analysis=report.policy_analysis,
+        has_expected_baseline=report.has_expected_baseline,
+        baseline_source=report.baseline_source,
+        baseline_confidence=report.baseline_confidence,
+        baseline_status=report.baseline_status,
+        functional_baseline=report.functional_baseline,
+    )
 def get_db():
     db = SessionLocal()
 
@@ -248,26 +302,34 @@ def analyze_endpoint(
     request: AnalyzeRequest,
     db: Session = Depends(get_db),
 ):
-    if not request.policy_text.strip():
-        raise HTTPException(
-            status_code=400,
-            detail="Privacy policy text is required.",
-        )
-
-    application = find_application_by_name_and_category(
+    application = get_or_create_application_for_analysis(
         db,
         request.application_name,
-        request.category,
+        (request.category or "Other").strip() or "Other",
+        request.description,
     )
 
-    if application is None:
-        raise HTTPException(
-            status_code=404,
-            detail=(
-                f"Application not found: "
-                f"{request.application_name}"
-            ),
+    policy_text = (
+        request.policy_text or ""
+    ).strip()
+    policy_source = request.policy_source
+
+    if not policy_text:
+        discovery = discover_privacy_policy(
+            request.application_name
         )
+
+        if not discovery.success or not discovery.policy_text:
+            raise HTTPException(
+                status_code=422,
+                detail=(
+                    discovery.error
+                    or "Privacy policy text is required."
+                ),
+            )
+
+        policy_text = discovery.policy_text
+        policy_source = discovery.source_url
 
     analysis_id = (
         f"ANALYSIS-{application.application_id}-"
@@ -280,7 +342,7 @@ def analyze_endpoint(
         # ---------------------------------------------------------
 
         evidence = extract_policy_evidence(
-            request.policy_text,
+            policy_text,
             request.application_name,
         )
 
@@ -291,14 +353,23 @@ def analyze_endpoint(
         runtime_policy = create_runtime_policy(
             db,
             application_id=application.application_id,
-            policy_text=request.policy_text,
-            policy_source=request.policy_source,
+            policy_text=policy_text,
+            policy_source=policy_source,
             evidence=evidence,
             analysis_id=analysis_id,
         )
 
         # ---------------------------------------------------------
-        # 3. Run deterministic FDO analysis on runtime policy
+        # 3. Ensure expected functional baseline exists
+        # ---------------------------------------------------------
+
+        baseline_result = ensure_functional_baseline(
+            db,
+            application,
+        )
+
+        # ---------------------------------------------------------
+        # 4. Run deterministic FDO analysis on runtime policy
         # ---------------------------------------------------------
 
         run_analysis(
@@ -312,34 +383,40 @@ def analyze_endpoint(
     # Semantic FDO analysis
     # ---------------------------------------------------------
 
-        semantic_repository = DBSemanticRepository(db)
+        persisted_semantic_results = []
 
-        semantic_service = DBSemanticResultService(
-        semantic_repository
-    )
+        if baseline_result.available:
+            try:
+                semantic_repository = DBSemanticRepository(db)
 
-        semantic_output_path = (
-        Path("outputs")
-        / "semantic"
-        / f"{analysis_id}.ttl"
-    )
-        semantic_results = semantic_service.analyze(
-    application_id=application.application_id,
-    policy_id=runtime_policy.policy_id,
-    output_path=semantic_output_path,
-)
+                semantic_service = DBSemanticResultService(
+                semantic_repository
+            )
 
-        semantic_repository = SemanticResultRepository(db)
+                semantic_output_path = (
+                Path("outputs")
+                / "semantic"
+                / f"{analysis_id}.ttl"
+            )
+                semantic_results = semantic_service.analyze(
+            application_id=application.application_id,
+            policy_id=runtime_policy.policy_id,
+            output_path=semantic_output_path,
+        )
 
-        semantic_repository.save_results(
-    analysis_id=analysis_id,
-    results=semantic_results,
-)
-        persisted_semantic_results = (
-    semantic_repository.get_by_analysis_id(
-        analysis_id
-    )
-)
+                semantic_repository = SemanticResultRepository(db)
+
+                semantic_repository.save_results(
+            analysis_id=analysis_id,
+            results=semantic_results,
+        )
+                persisted_semantic_results = (
+            semantic_repository.get_by_analysis_id(
+                analysis_id
+            )
+        )
+            except Exception:
+                persisted_semantic_results = []
 
         db.commit()
 
@@ -351,12 +428,14 @@ def analyze_endpoint(
             detail=str(exc),
         )
 
-    except Exception:
+    except Exception as exc:
+        import traceback
+        traceback.print_exc()
         db.rollback()
 
         raise HTTPException(
             status_code=500,
-            detail="Analysis execution failed.",
+            detail=f"Analysis execution failed: {exc}",
         )
 
     # -------------------------------------------------------------
@@ -374,19 +453,15 @@ def analyze_endpoint(
             detail="Analysis completed but report could not be loaded.",
         )
 
-    return AnalysisReportResponse(
-        analysis_id=report.analysis_id,
-        application_id=report.application_id,
-        policy_id=report.policy_id,
-        analysis_status=report.analysis_status,
-        total_mappings=report.total_mappings,
-        fdo_count=report.fdo_count,
-        not_fdo_count=report.not_fdo_count,
-        ambiguous_count=report.ambiguous_count,
-        comparisons=report.comparisons,
-        fdo_results=report.fdo_results,
-        semantic_results=persisted_semantic_results
-    )
+    response = _analysis_response(report)
+    response.semantic_results = [
+        SemanticFDOResultResponse.model_validate(r)
+        if not isinstance(r, SemanticFDOResultResponse)
+        else r
+        for r in (persisted_semantic_results or [])
+    ]
+    response.baseline_status = baseline_result.status
+    return response
 @app.get(
     "/api/v1/analyses/{analysis_id}/results",
     response_model=list[AnalysisResultResponse],
@@ -449,19 +524,7 @@ def get_analysis_endpoint(
             detail=f"Analysis not found: {analysis_id}",
         )
 
-    return AnalysisReportResponse(
-        analysis_id=report.analysis_id,
-        application_id=report.application_id,
-        policy_id=report.policy_id,
-        analysis_status=report.analysis_status,
-        total_mappings=report.total_mappings,
-        fdo_count=report.fdo_count,
-        not_fdo_count=report.not_fdo_count,
-        ambiguous_count=report.ambiguous_count,
-        comparisons=report.comparisons,
-        fdo_results=report.fdo_results,
-        semantic_results=report.semantic_results,
-    )
+    return _analysis_response(report)
 @app.get(
     "/api/v1/analyses",
     response_model=list[AnalysisHistoryResponse],
@@ -489,19 +552,7 @@ def get_analysis_report(
             detail=f"Analysis not found: {analysis_id}",
         )
 
-    return AnalysisReportResponse(
-        analysis_id=report.analysis_id,
-        application_id=report.application_id,
-        policy_id=report.policy_id,
-        analysis_status=report.analysis_status,
-        total_mappings=report.total_mappings,
-        fdo_count=report.fdo_count,
-        not_fdo_count=report.not_fdo_count,
-        ambiguous_count=report.ambiguous_count,
-        comparisons=report.comparisons,
-        fdo_results=report.fdo_results,
-        semantic_results=report.semantic_results,
-    )
+    return _analysis_response(report)
 @app.post(
     "/api/v1/analyses",
     response_model=AnalysisReportResponse,
@@ -516,6 +567,21 @@ def create_analysis_endpoint(
     )
 
     try:
+        application = get_application(
+            db,
+            request.application_id,
+        )
+
+        if application is None:
+            raise ValueError(
+                f"Application not found: {request.application_id}"
+            )
+
+        ensure_functional_baseline(
+            db,
+            application,
+        )
+
         run_analysis(
             db,
             analysis_id,
@@ -551,16 +617,4 @@ def create_analysis_endpoint(
             detail="Analysis completed but report could not be loaded.",
         )
 
-    return AnalysisReportResponse(
-        analysis_id=report.analysis_id,
-        application_id=report.application_id,
-        policy_id=report.policy_id,
-        analysis_status=report.analysis_status,
-        total_mappings=report.total_mappings,
-        fdo_count=report.fdo_count,
-        not_fdo_count=report.not_fdo_count,
-        ambiguous_count=report.ambiguous_count,
-        comparisons=report.comparisons,
-        fdo_results=report.fdo_results,
-        semantic_results=report.semantic_results,
-    )
+    return _analysis_response(report)

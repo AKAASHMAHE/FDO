@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base
@@ -43,7 +43,7 @@ class Comparison(Base):
     )
 
     functional_justification: Mapped[str] = mapped_column(
-        String(50),
+        Text,
         nullable=False,
     )
 

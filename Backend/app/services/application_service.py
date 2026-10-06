@@ -1,4 +1,6 @@
-from sqlalchemy import select
+import re
+
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models.application import Application
@@ -19,6 +21,96 @@ def get_application(
     application_id: str,
 ) -> Application | None:
     return session.get(Application, application_id)
+
+
+def normalize_application_name(
+    application_name: str,
+) -> str:
+    return " ".join(application_name.strip().lower().split())
+
+
+def find_application_by_name(
+    session: Session,
+    application_name: str,
+) -> Application | None:
+    normalized_name = normalize_application_name(
+        application_name
+    )
+
+    if not normalized_name:
+        return None
+
+    statement = select(Application).where(
+        func.lower(func.trim(Application.application_name))
+        == normalized_name
+    )
+
+    return session.scalars(statement).first()
+
+
+def _application_id_base(application_name: str) -> str:
+    normalized = normalize_application_name(
+        application_name
+    )
+    slug = re.sub(r"[^a-z0-9]+", "-", normalized).strip("-")
+
+    if not slug:
+        slug = "application"
+
+    return f"APP-{slug.upper()}"[:100]
+
+
+def _generate_application_id(
+    session: Session,
+    application_name: str,
+) -> str:
+    base = _application_id_base(application_name)
+
+    if session.get(Application, base) is None:
+        return base
+
+    suffix = 2
+
+    while True:
+        suffix_text = f"-{suffix}"
+        candidate = (
+            f"{base[:100 - len(suffix_text)]}{suffix_text}"
+        )
+
+        if session.get(Application, candidate) is None:
+            return candidate
+
+        suffix += 1
+
+
+def get_or_create_application_for_analysis(
+    session: Session,
+    application_name: str,
+    category: str,
+    description: str | None = None,
+) -> Application:
+    application = find_application_by_name(
+        session,
+        application_name,
+    )
+
+    if application is not None:
+        return application
+
+    application = Application(
+        application_id=_generate_application_id(
+            session,
+            application_name,
+        ),
+        application_name=application_name.strip(),
+        category=category.strip(),
+        description=description,
+    )
+
+    session.add(application)
+    session.flush()
+
+    return application
 
 
 def get_application_readiness(

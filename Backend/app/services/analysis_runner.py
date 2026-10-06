@@ -39,7 +39,7 @@ from app.services.result_service import (
 )
 
 from app.services.evidence_matcher import (
-    find_matching_evidence,
+    find_best_matching_evidence,
 )
 
 
@@ -147,16 +147,23 @@ def run_analysis(
 
         for expected in expected_mappings:
 
-            matching_evidence = find_matching_evidence(
+            evidence_match = find_best_matching_evidence(
                 session,
                 policy.policy_id,
-                expected.data_type,
+                expected,
             )
+            matching_evidence = evidence_match.evidence
 
             comparison = build_comparison(
                 expected,
                 matching_evidence,
             )
+
+            if evidence_match.status == "AMBIGUOUS":
+                comparison.evidence_status = "INSUFFICIENT"
+                comparison.functional_justification = (
+                    evidence_match.reason
+                )
 
             decision_input = FDODecisionInput(
                 expected_id=expected.expected_id,

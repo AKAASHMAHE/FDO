@@ -2,8 +2,6 @@ import json
 import os
 from pathlib import Path
 
-from google import genai
-
 
 MODEL_NAME = "gemini-3.5-flash-lite"
 
@@ -105,6 +103,8 @@ def extract_policy_evidence_with_ai(
             "GEMINI_API_KEY is not configured"
         )
 
+    from google import genai
+
     client = genai.Client(
         api_key=api_key
     )
@@ -116,12 +116,15 @@ for the FDO-Privacy project.
 Application:
 {application_name}
 
-Extract ONLY information explicitly supported by the
-privacy-policy text below.
+Extract ONLY actual privacy evidence explicitly supported
+by the privacy-policy text below.
 
 Do NOT infer information that is not stated.
 Do NOT decide whether something is FDO, NOT_FDO,
 or AMBIGUOUS.
+Do NOT extract arbitrary operational statements unless
+they explicitly describe personal-data collection,
+use, processing, storage, retention, or sharing.
 
 Return ONLY valid JSON in this exact structure:
 
@@ -177,6 +180,21 @@ Incorrect:
 If the policy does not provide enough information to
 identify a supported data type, use null rather than
 inventing a data type.
+
+Reject operational noise. Examples that should NOT be
+extracted unless they explicitly describe personal-data
+processing:
+
+- delivery is retried
+- infrastructure reliability
+- service availability
+- server uptime
+- generic system maintenance
+- generic technical operation
+
+Each evidence item must identify a personal-data category
+and a collection/processing action supported by the
+evidence_text.
 
 The evidence_text must contain the exact supporting
 sentence or phrase from the policy text.
@@ -290,3 +308,133 @@ Privacy-policy text:
         )
 
     return results
+
+
+def generate_functional_baseline_with_ai(
+    application_name: str,
+    category: str,
+    description: str | None = None,
+) -> dict | None:
+    """
+    Use Gemini to generate a conservative functional baseline.
+
+    Privacy-policy text and policy evidence must never be passed here.
+    The LLM only proposes the expected-data side; deterministic FDO
+    services perform the comparison and final decision.
+    """
+
+    _load_env_file()
+
+    api_key = os.getenv("GEMINI_API_KEY")
+
+    if not api_key:
+        raise RuntimeError(
+            "GEMINI_API_KEY is not configured"
+        )
+
+    from google import genai
+
+    client = genai.Client(
+        api_key=api_key
+    )
+
+    prompt = f"""
+You are generating a conservative functional-data baseline
+for the FDO-Privacy project.
+
+Use ONLY the application identity and functional context below.
+Do NOT use privacy-policy text.
+Do NOT decide FDO, NOT_FDO, or AMBIGUOUS.
+Do NOT list every possible personal-data type.
+Only include data reasonably necessary for primary application
+functionality.
+
+Application name:
+{application_name}
+
+Category:
+{category}
+
+Description:
+{description or "Not provided"}
+
+Return ONLY valid JSON in this exact structure:
+
+{{
+  "functions": [
+    {{
+      "function_name": "string",
+      "description": "string",
+      "expected_data": [
+        {{
+          "data_type": "DATA.ACCOUNT",
+          "necessity": "REQUIRED",
+          "purpose": "short functional purpose",
+          "justification": "short justification",
+          "confidence": 0.0
+        }}
+      ]
+    }}
+  ]
+}}
+
+Allowed data_type values:
+- DATA.LOCATION.PRECISE
+- DATA.LOCATION.APPROXIMATE
+- DATA.LOCATION
+- DATA.CONTACTS
+- DATA.DEVICE
+- DATA.ACCOUNT
+- DATA.FINANCIAL
+- DATA.HEALTH
+- DATA.MEDIA
+- DATA.USAGE
+- DATA.OTHER
+
+Allowed necessity values:
+- REQUIRED
+- OPTIONAL
+- NOT_REQUIRED
+
+Rules:
+- Prefer REQUIRED only when the data is clearly needed for
+  primary functionality.
+- Use OPTIONAL for feature-dependent data.
+- Do not include NOT_REQUIRED rows unless they clarify an obvious
+  non-requirement for this category.
+- If there is not enough information to infer primary functionality,
+  return {{"functions": []}}.
+"""
+
+    response = client.models.generate_content(
+        model=MODEL_NAME,
+        contents=prompt,
+    )
+
+    raw_text = (
+        response.text or ""
+    ).strip()
+
+    if not raw_text:
+        return None
+
+    if raw_text.startswith("```"):
+        lines = raw_text.strip().splitlines()
+
+        if lines and lines[0].startswith("```"):
+            lines = lines[1:]
+
+        if lines and lines[-1].strip() == "```":
+            lines = lines[:-1]
+
+        raw_text = "\n".join(lines).strip()
+
+    try:
+        parsed = json.loads(raw_text)
+    except json.JSONDecodeError:
+        return None
+
+    if not isinstance(parsed, dict):
+        return None
+
+    return parsed

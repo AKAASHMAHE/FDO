@@ -2,6 +2,44 @@ import { useEffect, useState } from "react";
 
 const API_URL = "http://127.0.0.1:8000";
 
+function getErrorDetail(data, fallback) {
+  const detail = data?.detail;
+
+  if (Array.isArray(detail)) {
+    return detail
+      .map((item) => {
+        const location = Array.isArray(item?.loc)
+          ? item.loc.join(".")
+          : "";
+        const message =
+          item?.msg || JSON.stringify(item);
+
+        return location
+          ? `${location}: ${message}`
+          : message;
+      })
+      .join("; ");
+  }
+
+  if (typeof detail === "string") {
+    return detail;
+  }
+
+  if (detail) {
+    return JSON.stringify(detail);
+  }
+
+  return fallback;
+}
+
+async function parseJsonResponse(response) {
+  try {
+    return await response.json();
+  } catch {
+    return null;
+  }
+}
+
 /* =========================================================
    UI Helpers
    ========================================================= */
@@ -23,6 +61,15 @@ function MetricCard({ value, label, type }) {
       <div className="metric-label">{label}</div>
     </div>
   );
+}
+
+function safeText(value, fallback = "Unknown") {
+  if (value === null || value === undefined) {
+    return fallback;
+  }
+
+  const text = String(value).trim();
+  return text || fallback;
 }
 
 /* =========================================================
@@ -55,7 +102,7 @@ function formatSemanticResource(value) {
   );
 
   if (expectedDataMatch) {
-    return expectedDataMatch[1];
+    return formatIdentifierLabel(expectedDataMatch[1]);
   }
 
   // DECLARED DATA URI
@@ -64,11 +111,139 @@ function formatSemanticResource(value) {
   );
 
   if (declaredDataMatch) {
-    return declaredDataMatch[1];
+    return formatIdentifierLabel(declaredDataMatch[1]);
   }
 
   // If it is not an ontology URI, return it normally.
   return text;
+}
+
+function formatIdentifierLabel(value) {
+  if (!value) {
+    return "Unknown";
+  }
+
+  let label = String(value).trim();
+
+  if (label.includes(":")) {
+    label = label.split(":").pop();
+  }
+
+  label = label
+    .replace(/^EXP[-_.]*/i, "")
+    .replace(/^AI[-_.]*/i, "")
+    .replace(/^DATA[._-]/i, "")
+    .replace(/^FUNC[._-]/i, "");
+
+  const words = label
+    .split(/[._-]+/)
+    .filter(Boolean);
+
+  if (
+    words.length > 1 &&
+    words[0].toUpperCase() === "MEDIA"
+  ) {
+    words.shift();
+  }
+
+  if (!words.length) {
+    return String(value).trim();
+  }
+
+  const replacements = {
+    NAV: "Navigation",
+    COM: "Communication",
+    COMM: "Communication",
+    VIDEO: "Video",
+    CALL: "Call",
+    MEDIA: "Media",
+    CAMERA: "Camera",
+    MICROPHONE: "Microphone",
+    LOCATION: "Location",
+    PRECISE: "Precise",
+    APPROXIMATE: "Approximate",
+    CONTACTS: "Contacts",
+    DEVICE: "Device",
+    ACCOUNT: "Account",
+    FINANCIAL: "Financial",
+    HEALTH: "Health",
+    USAGE: "Usage",
+    OTHER: "Other / Unclear Data",
+  };
+
+  return words
+    .map(
+      (word) =>
+        replacements[word.toUpperCase()] ||
+        word.charAt(0).toUpperCase() +
+          word.slice(1).toLowerCase()
+    )
+    .join(" ");
+}
+
+function formatDataLabel(resource, type) {
+  const typeLabel = formatIdentifierLabel(type);
+
+  if (
+    typeLabel &&
+    typeLabel !== "Unknown" &&
+    typeLabel !== "Other"
+  ) {
+    return typeLabel;
+  }
+
+  return formatSemanticResource(resource);
+}
+
+function formatPurposeLabel(value) {
+  return formatIdentifierLabel(value);
+}
+
+function normalizePurposes(item) {
+  if (Array.isArray(item.declared_purposes)) {
+    return item.declared_purposes
+      .map((purpose) => String(purpose).trim())
+      .filter(Boolean);
+  }
+
+  const value = item.declared_purpose;
+
+  if (!value) {
+    return [];
+  }
+
+  try {
+    const parsed = JSON.parse(value);
+
+    if (Array.isArray(parsed)) {
+      return parsed
+        .map((purpose) => String(purpose).trim())
+        .filter(Boolean);
+    }
+  } catch {
+    // Fall back to the original single-purpose response shape.
+  }
+
+  return [String(value).trim()].filter(Boolean);
+}
+
+function PurposeList({ purposes }) {
+  const purposeItems = Array.isArray(purposes)
+    ? purposes
+    : [];
+  const safePurposes = purposeItems.length
+    ? purposeItems
+    : ["Unknown"];
+
+  return (
+    <ul className="purpose-list">
+      {safePurposes.map((purpose, index) => (
+        <li key={`${purpose}-${index}`}>
+          {formatPurposeLabel(purpose)}
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 function formatFunctionName(value) {
@@ -114,244 +289,590 @@ function formatFunctionName(value) {
     .join(" ");
 }
 /* =========================================================
-   Semantic Result Card
+   Semantic Grouping & Cards
    ========================================================= */
 
-function SemanticResultCard({ item }) {
-  const confidence =
-    item.confidence !== null &&
-    item.confidence !== undefined
-      ? Math.round(item.confidence * 100)
-      : null;
+function groupSemanticResultsByFunction(items) {
+  if (!Array.isArray(items) || items.length === 0) {
+    return [];
+  }
 
-  const status = item.fdo_status || "AMBIGUOUS";
+  const groupsMap = new Map();
 
-  const statusLabel =
-    status === "FDO"
-      ? "FDO DETECTED"
-      : status === "NOT_FDO"
-      ? "NOT FDO"
-      : "AMBIGUOUS";
+  for (const item of items) {
+    const rawKey =
+      item.function ||
+      item.function_label ||
+      "Unknown Function";
+    const key = String(rawKey).trim().toLowerCase();
 
-  const functionName = formatSemanticResource(
-    item.function
+    if (!groupsMap.has(key)) {
+      const displayName =
+        item.function_label ||
+        formatSemanticResource(item.function);
+
+      groupsMap.set(key, {
+        functionKey: rawKey,
+        functionName: displayName,
+        items: [],
+      });
+    }
+
+    groupsMap.get(key).items.push(item);
+  }
+
+  return Array.from(groupsMap.values());
+}
+
+function GroupedSemanticCard({ group }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const { functionName, items } = group;
+
+  // 1. Status analysis
+  const statuses = items.map(
+    (i) => i.fdo_status || "AMBIGUOUS"
+  );
+  const uniqueStatuses = Array.from(new Set(statuses));
+  const isUniformStatus = uniqueStatuses.length === 1;
+  const uniformStatus = uniqueStatuses[0];
+
+  const fdoCount = items.filter(
+    (i) => (i.fdo_status || "") === "FDO"
+  ).length;
+  const notFdoCount = items.filter(
+    (i) => (i.fdo_status || "") === "NOT_FDO"
+  ).length;
+  const ambiguousCount = items.filter(
+    (i) =>
+      (i.fdo_status || "") !== "FDO" &&
+      (i.fdo_status || "") !== "NOT_FDO"
+  ).length;
+
+  // 2. Confidence analysis
+  const confidences = items
+    .map((i) =>
+      i.confidence !== null && i.confidence !== undefined
+        ? Math.round(i.confidence * 100)
+        : null
+    )
+    .filter((c) => c !== null);
+
+  const uniqueConfidences = Array.from(new Set(confidences));
+  const isUniformConfidence = uniqueConfidences.length === 1;
+  const displayConfidence = isUniformConfidence
+    ? `${uniqueConfidences[0]}%`
+    : confidences.length > 0
+    ? "Multiple confidence values"
+    : "N/A";
+
+  // 3. Expected data & purpose uniformity
+  const expectedDatas = Array.from(
+    new Set(
+      items.map(
+        (i) =>
+          i.expected_data_label ||
+          formatDataLabel(i.expected_data, i.expected_type)
+      )
+    )
+  );
+  const expectedPurposes = Array.from(
+    new Set(
+      items.map((i) => formatPurposeLabel(i.expected_purpose))
+    )
   );
 
-  const expectedData = formatSemanticResource(
-    item.expected_data
-  );
+  const isUniformExpectedData = expectedDatas.length === 1;
+  const isUniformExpectedPurpose = expectedPurposes.length === 1;
 
-  const declaredData = formatSemanticResource(
-    item.declared_data
+  // 4. Policy Declared Data Chips
+  const declaredDataItemsMap = new Map();
+  for (const item of items) {
+    const label =
+      item.declared_data_label ||
+      formatDataLabel(item.declared_data, item.declared_type);
+
+    if (label && !declaredDataItemsMap.has(label)) {
+      declaredDataItemsMap.set(label, {
+        label,
+        type: formatIdentifierLabel(item.declared_type),
+      });
+    }
+  }
+  const uniqueDeclaredData = Array.from(
+    declaredDataItemsMap.values()
   );
 
   return (
-    <article className="semantic-card">
-      {/* Function */}
+    <article className="semantic-card grouped-semantic-card">
+      {/* Header: Function & Decision Status */}
       <div className="semantic-card-header">
         <div>
-          <span className="section-label">
-            FUNCTION
-          </span>
-
+          <span className="section-label">FUNCTION</span>
           <h4>{functionName}</h4>
         </div>
 
-        <StatusBadge status={status} />
+        {isUniformStatus ? (
+          <StatusBadge status={uniformStatus} />
+        ) : (
+          <div className="status-breakdown-badges">
+            {fdoCount > 0 && (
+              <span className="status-badge fdo">
+                FDO: {fdoCount}
+              </span>
+            )}
+            {notFdoCount > 0 && (
+              <span className="status-badge not_fdo">
+                NOT FDO: {notFdoCount}
+              </span>
+            )}
+            {ambiguousCount > 0 && (
+              <span className="status-badge ambiguous">
+                AMBIGUOUS: {ambiguousCount}
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Semantic Decision */}
+      {/* Semantic Decision Banner */}
       <div
-        className={`semantic-decision ${status.toLowerCase()}`}
+        className={`semantic-decision ${
+          isUniformStatus
+            ? uniformStatus.toLowerCase()
+            : "mixed"
+        }`}
       >
         <div>
           <span className="section-label">
             SEMANTIC DECISION
           </span>
-
-          <strong>{statusLabel}</strong>
-        </div>
-
-        {confidence !== null && (
-          <div className="decision-confidence">
-            <span>Confidence</span>
-            <strong>{confidence}%</strong>
-          </div>
-        )}
-      </div>
-
-      {/* Expected vs Declared */}
-      <div className="comparison-grid">
-        <div className="comparison-column">
-          <span className="column-title expected">
-            EXPECTED
-          </span>
-
-          <div className="data-row">
-            <span>Data</span>
-            <strong>{expectedData}</strong>
-          </div>
-
-          <div className="data-row">
-            <span>Type</span>
-            <strong>
-              {item.expected_type || "Unknown"}
-            </strong>
-          </div>
-
-          <div className="data-row">
-            <span>Purpose</span>
-            <strong>
-              {item.expected_purpose || "Unknown"}
-            </strong>
-          </div>
-        </div>
-
-        <div className="comparison-column">
-          <span className="column-title declared">
-            DECLARED
-          </span>
-
-          <div className="data-row">
-            <span>Data</span>
-            <strong>{declaredData}</strong>
-          </div>
-
-          <div className="data-row">
-            <span>Type</span>
-            <strong>
-              {item.declared_type || "Unknown"}
-            </strong>
-          </div>
-
-          <div className="data-row">
-            <span>Purpose</span>
-            <strong>
-              {item.declared_purpose || "Unknown"}
-            </strong>
-          </div>
-        </div>
-      </div>
-
-      {/* Confidence */}
-      <div className="decision-section">
-        <div className="confidence-row">
-          <span>Decision Confidence</span>
-
           <strong>
-            {confidence !== null
-              ? `${confidence}%`
-              : "N/A"}
+            {isUniformStatus
+              ? uniformStatus === "FDO"
+                ? "FDO DETECTED"
+                : uniformStatus === "NOT_FDO"
+                ? "NOT FDO"
+                : "AMBIGUOUS"
+              : `MIXED DECISIONS (${items.length} COMPARISONS)`}
           </strong>
         </div>
 
-        {confidence !== null && (
-          <div className="confidence-track">
-            <div
-              className="confidence-fill"
-              style={{
-                width: `${confidence}%`,
-              }}
-            />
-          </div>
-        )}
+        <div className="decision-confidence">
+          <span>Confidence</span>
+          <strong>{displayConfidence}</strong>
+        </div>
       </div>
 
-      {/* Explanation */}
-      <div className="explanation-box">
-        <span className="section-label">
-          WHY THIS DECISION?
-        </span>
-
-        <p>
-          {item.reason ||
-            "The available semantic evidence was insufficient to determine a definitive result."}
-        </p>
-      </div>
-
-      {/* Reasoning Chain */}
-      <div className="reasoning-section">
-        <span className="section-label">
-          SEMANTIC REASONING CHAIN
-        </span>
-
-        <div className="reasoning-chain">
-          <div className="reasoning-step">
-            <span className="reasoning-number">
-              1
-            </span>
-
-            <div>
-              <strong>Function</strong>
-              <span>{functionName}</span>
-            </div>
-          </div>
-
-          <span className="reasoning-arrow">
-            ↓
+      {/* Summary Grid: Expected vs Policy Declared */}
+      <div className="comparison-grid">
+        {/* EXPECTED COLUMN */}
+        <div className="comparison-column">
+          <span className="column-title expected">
+            EXPECTED FUNCTIONAL BASELINE
           </span>
 
-          <div className="reasoning-step">
-            <span className="reasoning-number">
-              2
-            </span>
-
-            <div>
-              <strong>Expected Data</strong>
-              <span>{expectedData}</span>
-            </div>
-          </div>
-
-          <span className="reasoning-arrow">
-            ↓
-          </span>
-
-          <div className="reasoning-step">
-            <span className="reasoning-number">
-              3
-            </span>
-
-            <div>
-              <strong>Declared Data</strong>
-              <span>{declaredData}</span>
-            </div>
-          </div>
-
-          <span className="reasoning-arrow">
-            ↓
-          </span>
-
-          <div className="reasoning-step">
-            <span className="reasoning-number">
-              4
-            </span>
-
-            <div>
-              <strong>Purpose Comparison</strong>
+          {isUniformExpectedData && isUniformExpectedPurpose ? (
+            <>
+              <div className="data-row">
+                <span>Data</span>
+                <strong>{expectedDatas[0]}</strong>
+              </div>
+              <div className="data-row">
+                <span>Type</span>
+                <strong>{expectedDatas[0]}</strong>
+              </div>
+              <div className="data-row">
+                <span>Expected Purpose</span>
+                <strong>{expectedPurposes[0]}</strong>
+              </div>
+            </>
+          ) : (
+            <div className="multiple-expectations-notice">
+              <strong>Multiple semantic expectations</strong>
               <span>
-                Expected vs Declared Purpose
+                This function has {expectedDatas.length} data type(s) evaluated. Expand reasoning below for details.
               </span>
             </div>
+          )}
+        </div>
+
+        {/* POLICY DECLARED COLUMN */}
+        <div className="comparison-column">
+          <div className="column-title-row">
+            <span className="column-title declared">
+              POLICY DECLARED DATA
+            </span>
+            <span className="declared-count-badge">
+              {uniqueDeclaredData.length} data type
+              {uniqueDeclaredData.length !== 1 ? "s" : ""}
+            </span>
           </div>
 
-          <span className="reasoning-arrow">
-            ↓
-          </span>
-
-          <div className="reasoning-step final-step">
-            <span className="reasoning-number">
-              5
-            </span>
-
-            <div>
-              <strong>FDO Decision</strong>
-              <span>{statusLabel}</span>
-            </div>
+          <div className="declared-chips-container">
+            {uniqueDeclaredData.map((d) => (
+              <span className="declared-chip" key={d.label}>
+                {d.label}
+              </span>
+            ))}
           </div>
         </div>
       </div>
+
+      {/* Comparisons Count Footer */}
+      <div className="group-summary-footer">
+        <span className="comparisons-count-label">
+          {items.length} semantic comparison
+          {items.length !== 1 ? "s" : ""} evaluated
+        </span>
+      </div>
+
+      {/* View Reasoning Toggle Button */}
+      <button
+        type="button"
+        className="view-reasoning-toggle"
+        onClick={() => setIsExpanded(!isExpanded)}
+        aria-expanded={isExpanded}
+      >
+        <span>{isExpanded ? "Hide reasoning" : "View reasoning"}</span>
+        <svg
+          className={`chevron-icon ${isExpanded ? "expanded" : ""}`}
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 6L8 10L12 6"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+
+      {/* Expanded Reasoning Panel */}
+      {isExpanded && (
+        <div className="expanded-reasoning-panel">
+          <div className="reasoning-panel-title">
+            <h5>DETAILED COMPARISONS & REASONING</h5>
+          </div>
+
+          <div className="comparisons-subcards-list">
+            {items.map((item, idx) => {
+              const itemConfidence =
+                item.confidence !== null &&
+                item.confidence !== undefined
+                  ? `${Math.round(item.confidence * 100)}%`
+                  : "N/A";
+
+              const expectedD =
+                item.expected_data_label ||
+                formatDataLabel(
+                  item.expected_data,
+                  item.expected_type
+                );
+              const declaredD =
+                item.declared_data_label ||
+                formatDataLabel(
+                  item.declared_data,
+                  item.declared_type
+                );
+              const expectedP = formatPurposeLabel(
+                item.expected_purpose
+              );
+              const declaredPs = normalizePurposes(item);
+
+              const isMatch =
+                expectedD.toLowerCase() ===
+                declaredD.toLowerCase();
+
+              return (
+                <div
+                  className="comparison-subcard"
+                  key={item.semantic_result_id || idx}
+                >
+                  <div className="subcard-header">
+                    <span className="subcard-index">
+                      COMPARISON {idx + 1} OF {items.length}
+                    </span>
+                    <StatusBadge status={item.fdo_status} />
+                  </div>
+
+                  <div className="subcard-grid">
+                    {/* Expected */}
+                    <div className="subcard-col expected-col">
+                      <span className="subcard-col-label">
+                        EXPECTED
+                      </span>
+                      <div className="subcard-data-row">
+                        <span>Data & Type:</span>
+                        <strong>{expectedD}</strong>
+                      </div>
+                      <div className="subcard-data-row">
+                        <span>Purpose:</span>
+                        <strong>{expectedP}</strong>
+                      </div>
+                    </div>
+
+                    {/* Declared */}
+                    <div className="subcard-col declared-col">
+                      <span className="subcard-col-label">
+                        DECLARED
+                      </span>
+                      <div className="subcard-data-row">
+                        <span>Data & Type:</span>
+                        <strong>{declaredD}</strong>
+                      </div>
+                      <div className="subcard-data-row">
+                        <span>Purposes:</span>
+                        <PurposeList
+                          purposes={declaredPs}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Semantic Check Metrics */}
+                  <div className="subcard-checks-bar">
+                    <div className="check-metric">
+                      <span>Data Match:</span>
+                      <strong
+                        className={
+                          isMatch ? "match-yes" : "match-no"
+                        }
+                      >
+                        {isMatch
+                          ? "EXACT MATCH"
+                          : "DATA TYPE MISMATCH"}
+                      </strong>
+                    </div>
+                    <div className="check-metric">
+                      <span>Confidence:</span>
+                      <strong>{itemConfidence}</strong>
+                    </div>
+                  </div>
+
+                  {/* Why this decision */}
+                  <div className="subcard-explanation">
+                    <span className="explanation-title">
+                      WHY THIS DECISION
+                    </span>
+                    <p>
+                      {item.reason ||
+                        "The available semantic evidence was insufficient to determine a definitive result."}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </article>
   );
+}
+
+function PolicyAnalysisCard({ finding }) {
+  const confidence =
+    finding.confidence !== null &&
+    finding.confidence !== undefined
+      ? Math.round(finding.confidence * 100)
+      : null;
+
+  const evidence = Array.isArray(finding.evidence)
+    ? finding.evidence.slice(0, 2)
+    : [];
+
+  return (
+    <article className="policy-analysis-card">
+      <div className="policy-analysis-card-header">
+        <div>
+          <span className="section-label">
+            POLICY-DECLARED DATA
+          </span>
+
+          <h4>
+            {finding.data_label ||
+              formatIdentifierLabel(
+                finding.data_type
+              )}
+          </h4>
+        </div>
+
+        {confidence !== null && (
+          <span className="policy-confidence">
+            {confidence}% confidence
+          </span>
+        )}
+      </div>
+
+      <div className="data-row">
+        <span>Function / Processing Context</span>
+        <strong>
+          {formatPurposeLabel(
+            finding.function ||
+              "Policy-declared processing"
+          )}
+        </strong>
+      </div>
+
+      <div className="data-row">
+        <span>Purposes</span>
+        <PurposeList
+          purposes={finding.purposes || []}
+        />
+      </div>
+
+      {evidence.length > 0 && (
+        <details className="policy-evidence">
+          <summary>View evidence</summary>
+
+          <ul>
+            {evidence.map((item, index) => (
+              <li key={`${item}-${index}`}>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+    </article>
+  );
+}
+
+function FunctionalBaselineSection({ result }) {
+  const items = Array.isArray(result?.functional_baseline)
+    ? result.functional_baseline
+    : [];
+
+  if (!items.length) {
+    return null;
+  }
+
+  const source = result.baseline_source || "CURATED";
+  const status = result.baseline_status || "AVAILABLE";
+  const isAiDerived = source === "AI_DERIVED";
+  const confidence =
+    result.baseline_confidence !== null &&
+    result.baseline_confidence !== undefined
+      ? Math.round(result.baseline_confidence * 100)
+      : null;
+
+  const grouped = items.reduce((acc, item) => {
+    const key = item.function_name || "Unknown Function";
+
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+
+    acc[key].push(item);
+    return acc;
+  }, {});
+
+  return (
+    <section className="functional-baseline-section">
+      <div className="section-heading">
+        <div>
+          <span className="section-label">
+            FUNCTIONAL BASELINE
+          </span>
+
+          <h3>
+            {isAiDerived
+              ? "AI-derived functional baseline"
+              : "Curated functional baseline"}
+          </h3>
+
+          {isAiDerived && (
+            <p className="section-note">
+              This baseline is provisional and
+              generated from application
+              functionality, not from the privacy
+              policy.
+            </p>
+          )}
+        </div>
+
+        <span className="baseline-source-badge">
+          {status} / {source}
+          {confidence !== null
+            ? ` / ${confidence}%`
+            : ""}
+        </span>
+      </div>
+
+      <div className="functional-baseline-grid">
+        {Object.entries(grouped).map(
+          ([functionName, mappings]) => (
+            <article
+              className="functional-baseline-card"
+              key={functionName}
+            >
+              <span className="section-label">
+                FUNCTION
+              </span>
+
+              <h4>{functionName}</h4>
+
+              <div className="baseline-data-list">
+                {mappings.map((item) => (
+                  <div
+                    className="baseline-data-item"
+                    key={item.expected_id}
+                  >
+                    <strong>
+                      {formatIdentifierLabel(
+                        item.expected_data_type
+                      )}
+                    </strong>
+
+                    <span>{item.necessity}</span>
+
+                    <p>{item.expected_purpose}</p>
+
+                    {item.baseline_justification && (
+                      <p className="baseline-justification">
+                        {item.baseline_justification}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </article>
+          )
+        )}
+      </div>
+    </section>
+  );
+}
+
+function BaselineUnavailableSection({ result }) {
+  const policyAvailable =
+    result?.policy_analysis?.available === true;
+
+  return (
+    <section className="card info-card">
+      <span className="section-label">
+        FDO COMPARISON
+      </span>
+
+      <h3>Functional Baseline Unavailable</h3>
+
+      <p>
+        {policyAvailable
+          ? "Policy analysis is available, but FDO determination requires a functional baseline."
+          : "A definitive FDO determination cannot be made because no reliable functional baseline is available."}
+      </p>
+    </section>
+  );
+}
+
+function getPolicyFindings(result) {
+  const findings = result?.policy_analysis?.findings;
+
+  return Array.isArray(findings) ? findings : [];
 }
 
 /* =========================================================
@@ -371,10 +892,10 @@ function HistoryCard({ item, onView }) {
             APPLICATION
           </span>
 
-          <h4>{item.application_name}</h4>
+          <h4>{safeText(item.application_name)}</h4>
 
           <span className="history-application-id">
-            {item.application_id} · {item.category}
+            {safeText(item.application_id)} / {safeText(item.category)}
           </span>
         </div>
 
@@ -421,7 +942,7 @@ function HistoryCard({ item, onView }) {
           onView(item.analysis_id)
         }
       >
-        View Analysis →
+        View Analysis
       </button>
     </article>
   );
@@ -436,6 +957,9 @@ function App() {
     useState("");
 
   const [category, setCategory] =
+    useState("");
+
+  const [description, setDescription] =
     useState("");
 
   const [policyText, setPolicyText] =
@@ -462,6 +986,9 @@ function App() {
   const [showHistory, setShowHistory] =
     useState(false);
 
+  const [manualPolicyMode, setManualPolicyMode] =
+    useState(false);
+
   /* =======================================================
      Load History
      ======================================================= */
@@ -475,16 +1002,18 @@ function App() {
         `${API_URL}/api/v1/analyses`
       );
 
-      const data = await response.json();
+      const data = await parseJsonResponse(response);
 
       if (!response.ok) {
         throw new Error(
-          data.detail ||
+          getErrorDetail(
+            data,
             "Unable to load analysis history."
+          )
         );
       }
 
-      setHistory(data);
+      setHistory(Array.isArray(data) ? data : []);
     } catch (err) {
       setHistoryError(
         err.message ||
@@ -496,7 +1025,13 @@ function App() {
   };
 
   useEffect(() => {
-    loadHistory();
+    const timer = window.setTimeout(() => {
+      loadHistory();
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
   }, []);
 
   /* =======================================================
@@ -521,18 +1056,35 @@ function App() {
           body: JSON.stringify({
             application_name:
               applicationName,
-            category,
-            policy_text: policyText,
-            policy_source: "frontend",
+            category: category || "Other",
+            description: description.trim()
+              ? description
+              : undefined,
+            policy_text: policyText.trim()
+              ? policyText
+              : undefined,
+            policy_source: policyText.trim()
+              ? "frontend"
+              : undefined,
           }),
         }
       );
 
-      const data = await response.json();
+      const data = await parseJsonResponse(response);
 
       if (!response.ok) {
+        const fallback =
+          response.status === 422
+            ? "Invalid analysis request."
+            : response.status >= 500
+            ? "Server error while running analysis."
+            : "Analysis failed.";
+
         throw new Error(
-          data.detail || "Analysis failed."
+          `HTTP ${response.status}: ${getErrorDetail(
+            data,
+            fallback
+          )}`
         );
       }
 
@@ -541,10 +1093,19 @@ function App() {
       // Refresh history after successful analysis.
       await loadHistory();
     } catch (err) {
-      setError(
+      const message =
         err.message ||
-          "Unable to connect to the analysis server."
-      );
+        "Unable to connect to the analysis server.";
+
+      setError(`Analysis failed: ${message}`);
+
+      if (
+        message
+          .toLowerCase()
+          .includes("paste the policy manually")
+      ) {
+        setManualPolicyMode(true);
+      }
     } finally {
       setLoading(false);
     }
@@ -559,16 +1120,25 @@ function App() {
     setError("");
 
     try {
-      const response = await fetch(
+      let response = await fetch(
         `${API_URL}/api/v1/analyses/${analysisId}`
       );
 
-      const data = await response.json();
+      let data = await parseJsonResponse(response);
+
+      if (response.status === 404) {
+        response = await fetch(
+          `${API_URL}/api/v1/analysis/${analysisId}`
+        );
+        data = await parseJsonResponse(response);
+      }
 
       if (!response.ok) {
         throw new Error(
-          data.detail ||
+          getErrorDetail(
+            data,
             "Unable to load analysis."
+          )
         );
       }
 
@@ -587,13 +1157,17 @@ function App() {
         setCategory(
           selected.category
         );
+
+        setDescription("");
       }
 
       setShowHistory(false);
     } catch (err) {
       setError(
-        err.message ||
+        `Analysis failed: ${
+          err.message ||
           "Unable to load the selected analysis."
+        }`
       );
     } finally {
       setLoading(false);
@@ -609,7 +1183,9 @@ function App() {
     setError("");
     setApplicationName("");
     setCategory("");
+    setDescription("");
     setPolicyText("");
+    setManualPolicyMode(false);
   };
 
   /* =======================================================
@@ -656,7 +1232,7 @@ function App() {
             onClick={toggleHistory}
           >
             {showHistory
-              ? "← Hide History"
+              ? "Hide History"
               : "Analysis History"}
           </button>
 
@@ -741,7 +1317,6 @@ function App() {
                           event.target.value
                         )
                       }
-                      required
                     >
                       <option value="">
                         Select category
@@ -771,27 +1346,54 @@ function App() {
 
                 </div>
 
+                <div className="form-single">
+                  <label>
+                    Application Description
+                  </label>
+
+                  <input
+                    type="text"
+                    placeholder="Optional: primary features or functional context"
+                    value={description}
+                    onChange={(event) =>
+                      setDescription(
+                        event.target.value
+                      )
+                    }
+                  />
+                </div>
+
                 <label>
                   Privacy Policy
                 </label>
 
+                {!manualPolicyMode && (
+                  <p className="field-help">
+                    Leave this empty to let the system
+                    attempt official privacy policy discovery.
+                  </p>
+                )}
+
                 <textarea
                   className="policy-input"
-                  placeholder="Paste the privacy policy text here..."
+                  placeholder={
+                    manualPolicyMode
+                      ? "Paste the privacy policy text here to continue."
+                      : "Optional fallback: paste policy text here, or leave blank for automatic discovery."
+                  }
                   value={policyText}
                   onChange={(event) =>
                     setPolicyText(
                       event.target.value
                     )
                   }
-                  required
                 />
 
                 <div className="form-footer">
                   <span>
-                    The policy will be processed
-                    through the FDO semantic
-                    analysis pipeline.
+                    {policyText.trim()
+                      ? "The supplied policy text will be processed through the FDO semantic analysis pipeline."
+                      : "The system will try to discover an official privacy policy first. If discovery fails, paste the policy manually."}
                   </span>
 
                   <button
@@ -800,7 +1402,9 @@ function App() {
                   >
                     {loading
                       ? "Analyzing..."
-                      : "Analyze Policy →"}
+                      : policyText.trim()
+                      ? "Analyze Policy"
+                      : "Find & Analyze Policy"}
                   </button>
                 </div>
               </section>
@@ -838,7 +1442,7 @@ function App() {
                   setShowHistory(false)
                 }
               >
-                ← Back to Analysis
+                Back to Analysis
               </button>
             </div>
 
@@ -920,13 +1524,15 @@ function App() {
                 </span>
 
                 <h2>
-                  {applicationName}
+                  {safeText(
+                    applicationName || result.application_id,
+                    "Analysis Result"
+                  )}
                 </h2>
 
                 <p>
-                  {category ||
-                    "Saved analysis"}{" "}
-                  · Semantic privacy analysis
+                  {safeText(category, "Saved analysis")}{" "}
+                  / Semantic privacy analysis
                 </p>
               </div>
 
@@ -934,7 +1540,7 @@ function App() {
                 className="secondary-button"
                 onClick={resetAnalysis}
               >
-                ← New Analysis
+                New Analysis
               </button>
             </div>
 
@@ -996,62 +1602,117 @@ function App() {
 
             </div>
 
-            {/* Semantic Results */}
-            {result.semantic_results?.length >
-            0 ? (
-              <section>
+            <FunctionalBaselineSection
+              result={result}
+            />
 
+            {result.policy_analysis?.available && (
+              <section className="policy-analysis-section">
                 <div className="section-heading">
                   <div>
                     <span className="section-label">
-                      SEMANTIC LAYER
+                      POLICY ANALYSIS
                     </span>
 
                     <h3>
-                      FDO Analysis Results
+                      Policy-Declared Findings
                     </h3>
+
+                    {result.policy_analysis
+                      .policy_source && (
+                      <p className="section-note">
+                        Source:{" "}
+                        {
+                          result.policy_analysis
+                            .policy_source
+                        }
+                      </p>
+                    )}
                   </div>
 
                   <span className="result-count">
-                    {
-                      result.semantic_results
-                        .length
-                    }{" "}
-                    result
-                    {result.semantic_results
+                    {getPolicyFindings(result).length}{" "}
+                    finding
+                    {getPolicyFindings(result)
                       .length !== 1
                       ? "s"
                       : ""}
                   </span>
                 </div>
 
-                <div className="semantic-results">
-                  {result.semantic_results.map(
-                    (item) => (
-                      <SemanticResultCard
-                        key={
-                          item.semantic_result_id
-                        }
-                        item={item}
+                <div className="policy-analysis-grid">
+                  {getPolicyFindings(result).map(
+                    (finding, index) => (
+                      <PolicyAnalysisCard
+                        key={`${finding.data_type}-${finding.function}-${index}`}
+                        finding={finding}
                       />
                     )
                   )}
                 </div>
-
               </section>
-            ) : (
+            )}
+
+            {!result.has_expected_baseline && (
+              <BaselineUnavailableSection
+                result={result}
+              />
+            )}
+
+            {/* Semantic Results */}
+            {result.has_expected_baseline &&
+            result.semantic_results?.length > 0 ? (() => {
+              const groupedResults = groupSemanticResultsByFunction(
+                result.semantic_results
+              );
+
+              return (
+                <section>
+                  <div className="section-heading">
+                    <div>
+                      <span className="section-label">
+                        SEMANTIC LAYER
+                      </span>
+
+                      <h3>
+                        FDO Analysis Results
+                      </h3>
+                    </div>
+
+                    <span className="result-count">
+                      {groupedResults.length} function group
+                      {groupedResults.length !== 1 ? "s" : ""}{" "}
+                      ({result.semantic_results.length} total comparison
+                      {result.semantic_results.length !== 1 ? "s" : ""})
+                    </span>
+                  </div>
+
+                  <div className="semantic-results">
+                    {groupedResults.map((group) => (
+                      <GroupedSemanticCard
+                        key={group.functionKey}
+                        group={group}
+                      />
+                    ))}
+                  </div>
+                </section>
+              );
+            })() : result.has_expected_baseline ? (
               <section className="card empty-state">
                 <h3>
                   No semantic findings
                 </h3>
 
                 <p>
-                  The analysis completed
-                  without semantic FDO
-                  findings.
+                  Expected functional data mapping is
+                  not available for this application,
+                  or no trustworthy policy-declared
+                  data evidence was found, so a
+                  definitive FDO comparison cannot be
+                  made.
                 </p>
               </section>
-            )}
+            ) : null}
 
           </section>
         )}
@@ -1065,7 +1726,7 @@ function App() {
         </span>
 
         <span>
-          OWL · RDF · SPARQL · Apache Jena
+          OWL / RDF / SPARQL / Apache Jena
           Fuseki
         </span>
       </footer>

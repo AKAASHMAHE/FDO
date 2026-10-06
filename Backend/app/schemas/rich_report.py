@@ -1,4 +1,7 @@
-from pydantic import BaseModel
+import json
+
+from app.schemas.analysis import _format_identifier_label
+from pydantic import BaseModel, ConfigDict, computed_field
 
 
 class RichApplicationResponse(BaseModel):
@@ -56,6 +59,8 @@ class RichAnalysisSummaryResponse(BaseModel):
     not_fdo: int
     ambiguous: int
 class RichSemanticFDOResultResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     semantic_result_id: str
     application_id: str
     application: str
@@ -76,6 +81,45 @@ class RichSemanticFDOResultResponse(BaseModel):
 
     explanation: str
 
+    @computed_field
+    @property
+    def function_label(self) -> str:
+        return _format_identifier_label(self.function)
+
+    @computed_field
+    @property
+    def expected_data_label(self) -> str:
+        return _format_identifier_label(
+            self.expected_type or self.expected_data
+        )
+
+    @computed_field
+    @property
+    def declared_data_label(self) -> str:
+        return _format_identifier_label(
+            self.declared_type or self.declared_data
+        )
+
+    @computed_field
+    @property
+    def declared_purposes(self) -> list[str]:
+        if not self.declared_purpose:
+            return []
+
+        try:
+            parsed = json.loads(self.declared_purpose)
+        except (TypeError, ValueError):
+            return [self.declared_purpose]
+
+        if isinstance(parsed, list):
+            return [
+                str(item)
+                for item in parsed
+                if str(item).strip()
+            ]
+
+        return [self.declared_purpose]
+
 class RichAnalysisReportResponse(BaseModel):
     analysis_id: str
     application: RichApplicationResponse
@@ -83,4 +127,3 @@ class RichAnalysisReportResponse(BaseModel):
     summary: RichAnalysisSummaryResponse
     results: list[RichAnalysisResultResponse]
     semantic_results: list[RichSemanticFDOResultResponse] = []
-

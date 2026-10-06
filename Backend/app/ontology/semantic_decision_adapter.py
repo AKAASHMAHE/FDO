@@ -7,6 +7,9 @@ from app.services.fdo_decision_service import (
     FDODecisionOutput,
     evaluate_fdo_decision,
 )
+from app.services.comparison_service import (
+    classify_purpose_compatibility,
+)
 
 
 def semantic_finding_to_decision_input(
@@ -31,11 +34,13 @@ def semantic_finding_to_decision_input(
         else "NO_MATCH"
     )
 
-    purpose_compatibility = (
-        "COMPATIBLE"
-        if expected_purpose == declared_purpose
-        else "INCOMPATIBLE"
+    purpose_compatibility = classify_purpose_compatibility(
+        expected_purpose,
+        declared_purpose,
     )
+
+    if purpose_compatibility == "UNKNOWN":
+        purpose_compatibility = "NO_EVIDENCE"
 
     return FDODecisionInput(
         expected_id=str(finding.get("expected_data", "")),
