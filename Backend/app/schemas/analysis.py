@@ -51,15 +51,16 @@ class SemanticFDOResultResponse(BaseModel):
 class AnalysisHistoryResponse(BaseModel):
     analysis_id: str
     application_id: str
+    application_name: str
+    category: str
     policy_id: str
     analysis_status: str
-
     total_mappings: int
     fdo_count: int
     not_fdo_count: int
     ambiguous_count: int
-
     created_at: str
+    
 class AnalysisReportResponse(BaseModel):
     analysis_id: str
     application_id: str

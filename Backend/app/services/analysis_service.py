@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.models.analysis import Analysis
 from app.models.comparison import Comparison
 from app.models.fdo_result import FDOResult
-
+from app.models.application import Application
 
 def create_analysis(
     session: Session,
@@ -52,17 +52,34 @@ def get_analysis(
     )
 
 
-def get_all_analyses(
-    session: Session,
-) -> list[Analysis]:
+def get_all_analyses(session: Session):
     statement = (
-        select(Analysis)
+        select(Analysis, Application)
+        .join(
+            Application,
+            Analysis.application_id == Application.application_id,
+        )
         .order_by(Analysis.created_at.desc())
     )
 
-    return list(
-        session.scalars(statement).all()
-    )
+    rows = session.execute(statement).all()
+
+    return [
+        {
+            "analysis_id": analysis.analysis_id,
+            "application_id": analysis.application_id,
+            "application_name": application.application_name,
+            "category": application.category,
+            "policy_id": analysis.policy_id,
+            "analysis_status": analysis.analysis_status,
+            "total_mappings": analysis.total_mappings,
+            "fdo_count": analysis.fdo_count,
+            "not_fdo_count": analysis.not_fdo_count,
+            "ambiguous_count": analysis.ambiguous_count,
+            "created_at": analysis.created_at,
+        }
+        for analysis, application in rows
+    ]
 
 
 def get_comparisons_by_analysis(
