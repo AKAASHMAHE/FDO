@@ -3,11 +3,13 @@ from sqlalchemy.orm import Session
 from pathlib import Path
 from app.config import settings
 from app.database import SessionLocal
-
+from fastapi.middleware.cors import CORSMiddleware
 from app.models.function import Function
 
 from app.services.analysis_report_service import build_analysis_report
+
 from uuid import uuid4
+
 from app.services.rich_report_service import (
     build_rich_analysis_report,
 )
@@ -28,6 +30,7 @@ from app.schemas.analysis_result import AnalysisResultResponse
 from app.services.analysis_result_service import get_analysis_results
 
 from app.services.analysis_runner import run_analysis
+
 from app.schemas.analysis import (
     AnalysisCreateRequest,
     AnalysisReportResponse,
@@ -36,6 +39,7 @@ from app.schemas.analysis import (
     ApplicationDetailResponse,
     ExpectedMappingsResponse,
     AnalyzeRequest,
+    AnalysisHistoryResponse,
 )
 from app.schemas.policy_extraction import (
     PolicyExtractionRequest,
@@ -61,13 +65,32 @@ from app.ontology.semantic_result_repository import (
 )
 from app.ontology.db_semantic_repository import DBSemanticRepository
 from app.ontology.db_semantic_result_service import DBSemanticResultService
+
+from app.services.analysis_service import (
+    create_analysis,
+    get_analysis,
+    get_all_analyses,
+    get_comparisons_by_analysis,
+    get_fdo_results_by_analysis,
+)
+
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
     description="Backend API for the FDO-Privacy prototype.",
 )
-
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:5174",
+        "http://127.0.0.1:5174",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 def get_db():
     db = SessionLocal()
 
@@ -439,6 +462,14 @@ def get_analysis_endpoint(
         fdo_results=report.fdo_results,
         semantic_results=report.semantic_results,
     )
+@app.get(
+    "/api/v1/analyses",
+    response_model=list[AnalysisHistoryResponse],
+)
+def get_all_analyses_endpoint(
+    db: Session = Depends(get_db),
+):
+    return get_all_analyses(db)
 @app.get(
     "/api/v1/analyses/{analysis_id}",
     response_model=AnalysisReportResponse,

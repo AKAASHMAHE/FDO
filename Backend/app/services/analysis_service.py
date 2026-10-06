@@ -57,7 +57,7 @@ def get_all_analyses(
 ) -> list[Analysis]:
     statement = (
         select(Analysis)
-        .order_by(Analysis.created_at)
+        .order_by(Analysis.created_at.desc())
     )
 
     return list(

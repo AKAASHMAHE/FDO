@@ -1,0 +1,31 @@
+# Python
+Backend/.venv/
+Backend/__pycache__/
+Backend/**/*.pyc
+Backend/.pytest_cache/
+
+# Environment / secrets
+Backend/.env
+
+# Local database
+Backend/*.db
+
+# Generated semantic outputs
+Backend/outputs/
+
+# Node / React
+Frontend/node_modules/
+Frontend/dist/
+Frontend/.vite/
+
+# Fuseki runtime data
+apache-jena-fuseki-6.2.0/run/databases/
+apache-jena-fuseki-6.2.0/run/logs/
+
+# IDE
+.vscode/
+.idea/
+
+# Apache Jena Fuseki installation
+apache-jena-fuseki-6.2.0/
+apache-jena-fuseki-6.2.0.zip
