@@ -3,6 +3,7 @@ from sqlalchemy import inspect
 
 from app.main import app
 from app.database import engine
+from test_helpers import fake_google_maps_baseline
 
 
 def test_semantic_results_are_persisted_in_database(
@@ -10,7 +11,7 @@ def test_semantic_results_are_persisted_in_database(
 ):
     fake_evidence = [
         {
-            "data_type": "precise_location",
+            "data_type": "DATA.LOCATION.PRECISE",
             "purpose": "advertising",
             "entity": "third_party_advertiser",
             "sharing": "shared",
@@ -25,6 +26,10 @@ def test_semantic_results_are_persisted_in_database(
         }
     ]
 
+    monkeypatch.setattr(
+        "app.services.functional_baseline_service.generate_functional_baseline_with_ai",
+        fake_google_maps_baseline,
+    )
     monkeypatch.setattr(
         "app.main.extract_policy_evidence",
         lambda policy_text, application_name: fake_evidence,

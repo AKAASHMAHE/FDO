@@ -1,6 +1,7 @@
 from fastapi.testclient import TestClient
 
 from app.main import app
+from test_helpers import fake_google_maps_baseline
 
 
 def test_rich_report_contains_semantic_explanations(
@@ -8,7 +9,7 @@ def test_rich_report_contains_semantic_explanations(
 ):
     fake_evidence = [
         {
-            "data_type": "precise_location",
+            "data_type": "DATA.LOCATION.PRECISE",
             "purpose": "advertising",
             "entity": "third_party_advertiser",
             "sharing": "shared",
@@ -23,6 +24,10 @@ def test_rich_report_contains_semantic_explanations(
         }
     ]
 
+    monkeypatch.setattr(
+        "app.services.functional_baseline_service.generate_functional_baseline_with_ai",
+        fake_google_maps_baseline,
+    )
     monkeypatch.setattr(
         "app.main.extract_policy_evidence",
         lambda policy_text, application_name: fake_evidence,
