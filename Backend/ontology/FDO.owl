@@ -3,221 +3,39 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 >
-  <rdf:Description rdf:about="http://example.org/fdo#Purpose">
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_DEVICE_STORAGE">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>Purpose</rdfs:label>
-    <rdfs:comment>FDO semantic class representing Purpose.</rdfs:comment>
+    <rdfs:label>DATA.DEVICE.STORAGE</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.DEVICE.STORAGE.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_DEVICE"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#performsFunction">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>performsFunction</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Application"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#Function"/>
-    <rdfs:comment>Connects an application to a function it performs.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#Ontology">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
-    <rdfs:label>Functional Data Ontology</rdfs:label>
-    <rdfs:comment>Ontology for semantic analysis of application functionality, personal data processing, privacy policy evidence, and Functional Data Overreach.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#expectedData">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>expectedData</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Function"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#ExpectedData"/>
-    <rdfs:comment>Connects a function to expected data requirements.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#RetentionPolicy">
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_USAGE_PLAYBACK_ACTIVITY">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>RetentionPolicy</rdfs:label>
-    <rdfs:comment>FDO semantic class representing RetentionPolicy.</rdfs:comment>
+    <rdfs:label>DATA.USAGE.PLAYBACK_ACTIVITY</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.USAGE.PLAYBACK_ACTIVITY.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_USAGE"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#declaredData">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>declaredData</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Application"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#DeclaredData"/>
-    <rdfs:comment>Connects an application to data declared in its privacy policy.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#id">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>id</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#FDOEntity"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Unique identifier of an ontology entity.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#purpose">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>purpose</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#ExpectedData"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Purpose associated with expected data.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#status">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>status</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Consent"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Status of consent or an FDO finding.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#name">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>name</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#FDOEntity"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Human-readable name of an ontology entity.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#UserRight">
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_CONTACT_EMAIL_PHONE_USERNAME">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>UserRight</rdfs:label>
-    <rdfs:comment>FDO semantic class representing UserRight.</rdfs:comment>
+    <rdfs:label>DATA.CONTACT.EMAIL_PHONE_USERNAME</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.CONTACT.EMAIL_PHONE_USERNAME.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_CONTACT"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#DeclaredData">
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_MEDIA_MICROPHONE">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>DeclaredData</rdfs:label>
-    <rdfs:comment>FDO semantic class representing DeclaredData.</rdfs:comment>
+    <rdfs:label>DATA.MEDIA.MICROPHONE</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.MEDIA.MICROPHONE.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_MEDIA"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#Overreach">
+  <rdf:Description rdf:about="http://example.org/fdo#Function">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>Overreach</rdfs:label>
-    <rdfs:comment>FDO semantic class representing Overreach.</rdfs:comment>
+    <rdfs:label>Function</rdfs:label>
+    <rdfs:comment>FDO semantic class representing Function.</rdfs:comment>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#hasUserRight">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>hasUserRight</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#PrivacyPolicy"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#UserRight"/>
-    <rdfs:comment>Connects a privacy policy to user rights it provides.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#supportedByPolicy">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>supportedByPolicy</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#PolicyClause"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#PrivacyPolicy"/>
-    <rdfs:comment>Connects a policy clause to its source privacy policy.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#Risk">
+  <rdf:Description rdf:about="http://example.org/fdo#Application">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>Risk</rdfs:label>
-    <rdfs:comment>FDO semantic class representing Risk.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#supportedByClause">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>supportedByClause</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#DeclaredData"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#PolicyClause"/>
-    <rdfs:comment>Connects a declared data fact to policy evidence supporting it.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#hasRisk">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>hasRisk</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Overreach"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#Risk"/>
-    <rdfs:comment>Connects an overreach finding to an associated privacy risk.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#ProcessingActivity">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>ProcessingActivity</rdfs:label>
-    <rdfs:comment>FDO semantic class representing ProcessingActivity.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#declaredByApplication">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>declaredByApplication</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#DeclaredData"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#Application"/>
-    <rdfs:comment>Connects declared data to the application declaring it.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#confidence">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>confidence</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Overreach"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-    <rdfs:comment>Confidence associated with an FDO finding.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#collectsData">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>collectsData</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Application"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#PersonalData"/>
-    <rdfs:comment>Connects an application to personal data it collects.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#ExpectedData">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>ExpectedData</rdfs:label>
-    <rdfs:comment>FDO semantic class representing ExpectedData.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#expectedForFunction">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>expectedForFunction</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#ExpectedData"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#Function"/>
-    <rdfs:comment>Connects expected data to the function for which it is expected.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#level">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>level</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Risk"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Risk level associated with an FDO finding.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#retention">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>retention</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#DeclaredData"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Retention information associated with declared data.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#PersonalData">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>PersonalData</rdfs:label>
-    <rdfs:comment>FDO semantic class representing PersonalData.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#sharedWith">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>sharedWith</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#PersonalData"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#Recipient"/>
-    <rdfs:comment>Connects personal data to recipients with whom it is shared.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#sharing">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>sharing</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#DeclaredData"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Sharing information associated with declared data.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#usedForPurpose">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>usedForPurpose</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#PersonalData"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#Purpose"/>
-    <rdfs:comment>Connects personal data to its stated processing purpose.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#hasRetentionPolicy">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>hasRetentionPolicy</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#PersonalData"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#RetentionPolicy"/>
-    <rdfs:comment>Connects personal data to its retention policy.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#sensitivityCategory">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>sensitivityCategory</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#PersonalData"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Category describing the sensitivity of personal data.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#justificationType">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>justificationType</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Justification"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Type of justification supporting an FDO finding.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#SensitiveData">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>SensitiveData</rdfs:label>
-    <rdfs:comment>FDO semantic class representing SensitiveData.</rdfs:comment>
+    <rdfs:label>Application</rdfs:label>
+    <rdfs:comment>FDO semantic class representing Application.</rdfs:comment>
   </rdf:Description>
   <rdf:Description rdf:about="http://example.org/fdo#dataType">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
@@ -226,92 +44,30 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Type of personal data.</rdfs:comment>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#sensitive">
+  <rdf:Description rdf:about="http://example.org/fdo#id">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>sensitive</rdfs:label>
+    <rdfs:label>id</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#FDOEntity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Unique identifier of an ontology entity.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_MEDIA">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.MEDIA</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.MEDIA.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#sharedWith">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>sharedWith</rdfs:label>
     <rdfs:domain rdf:resource="http://example.org/fdo#PersonalData"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:comment>Indicates whether a data type is sensitive.</rdfs:comment>
+    <rdfs:range rdf:resource="http://example.org/fdo#Recipient"/>
+    <rdfs:comment>Connects personal data to recipients with whom it is shared.</rdfs:comment>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#score">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>score</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Risk"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-    <rdfs:comment>Numerical risk score.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#hasConsent">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>hasConsent</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Application"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#Consent"/>
-    <rdfs:comment>Connects an application to a consent record.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#concernsFunction">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>concernsFunction</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Overreach"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#Function"/>
-    <rdfs:comment>Connects an overreach finding to the affected function.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#requiresData">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>requiresData</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Function"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#PersonalData"/>
-    <rdfs:comment>Connects a function to data reasonably required for that function.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#concernsData">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>concernsData</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Overreach"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#PersonalData"/>
-    <rdfs:comment>Connects an overreach finding to the data involved.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#Function">
+  <rdf:Description rdf:about="http://example.org/fdo#ProcessingActivity">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>Function</rdfs:label>
-    <rdfs:comment>FDO semantic class representing Function.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#duration">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>duration</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#RetentionPolicy"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Retention duration associated with personal data.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#declaredDataPurpose">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>declaredDataPurpose</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#DeclaredData"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#Purpose"/>
-    <rdfs:comment>Connects declared data to its semantic processing purpose.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#category">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>category</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Application"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Category of an application.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#version">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>version</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#PrivacyPolicy"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Version of the privacy policy.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#hasJustification">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>hasJustification</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Overreach"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#Justification"/>
-    <rdfs:comment>Connects an overreach finding to its justification.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#PrivacyPolicy">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>PrivacyPolicy</rdfs:label>
-    <rdfs:comment>FDO semantic class representing PrivacyPolicy.</rdfs:comment>
+    <rdfs:label>ProcessingActivity</rdfs:label>
+    <rdfs:comment>FDO semantic class representing ProcessingActivity.</rdfs:comment>
   </rdf:Description>
   <rdf:Description rdf:about="http://example.org/fdo#declaredDataType">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
@@ -320,24 +76,164 @@
     <rdfs:range rdf:resource="http://example.org/fdo#PersonalData"/>
     <rdfs:comment>Connects declared data to the semantic personal data concept it represents.</rdfs:comment>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#expectedDataType">
+  <rdf:Description rdf:about="http://example.org/fdo#performsFunction">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>expectedDataType</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#ExpectedData"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#PersonalData"/>
-    <rdfs:comment>Connects expected data to the semantic personal data concept it represents.</rdfs:comment>
+    <rdfs:label>performsFunction</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Application"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#Function"/>
+    <rdfs:comment>Connects an application to a function it performs.</rdfs:comment>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#Application">
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_CONTACTS_LIST">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>Application</rdfs:label>
-    <rdfs:comment>FDO semantic class representing Application.</rdfs:comment>
+    <rdfs:label>DATA.CONTACTS.LIST</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.CONTACTS.LIST.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_CONTACTS"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#necessity">
+  <rdf:Description rdf:about="http://example.org/fdo#version">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>necessity</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#ExpectedData"/>
+    <rdfs:label>version</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#PrivacyPolicy"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Necessity level of expected data.</rdfs:comment>
+    <rdfs:comment>Version of the privacy policy.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_FINANCIAL_TRANSACTION">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.FINANCIAL.TRANSACTION</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.FINANCIAL.TRANSACTION.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_FINANCIAL"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#usedForPurpose">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>usedForPurpose</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#PersonalData"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#Purpose"/>
+    <rdfs:comment>Connects personal data to its stated processing purpose.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#Consent">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Consent</rdfs:label>
+    <rdfs:comment>FDO semantic class representing Consent.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_AUTH">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.AUTH</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.AUTH.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#confidence">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>confidence</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Overreach"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:comment>Confidence associated with an FDO finding.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_FILE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.FILE</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.FILE.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#RetentionPolicy">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>RetentionPolicy</rdfs:label>
+    <rdfs:comment>FDO semantic class representing RetentionPolicy.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#justificationType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>justificationType</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Justification"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Type of justification supporting an FDO finding.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_ACCOUNT_PERSONAL_INFO">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.ACCOUNT.PERSONAL_INFO</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.ACCOUNT.PERSONAL_INFO.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_ACCOUNT"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#hasUserRight">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>hasUserRight</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#PrivacyPolicy"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#UserRight"/>
+    <rdfs:comment>Connects a privacy policy to user rights it provides.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_USAGE_PROGRESS_RECORDS">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.USAGE.PROGRESS_RECORDS</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.USAGE.PROGRESS_RECORDS.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_USAGE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#retention">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>retention</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#DeclaredData"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Retention information associated with declared data.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#status">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>status</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Consent"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Status of consent or an FDO finding.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_MEDIA_PHOTOS_VIDEOS">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.MEDIA.PHOTOS_VIDEOS</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.MEDIA.PHOTOS_VIDEOS.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_MEDIA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#supportedByClause">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>supportedByClause</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#DeclaredData"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#PolicyClause"/>
+    <rdfs:comment>Connects a declared data fact to policy evidence supporting it.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#concernsFunction">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>concernsFunction</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Overreach"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#Function"/>
+    <rdfs:comment>Connects an overreach finding to the affected function.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#declaredDataPurpose">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>declaredDataPurpose</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#DeclaredData"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#Purpose"/>
+    <rdfs:comment>Connects declared data to its semantic processing purpose.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#level">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>level</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Risk"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Risk level associated with an FDO finding.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_USAGE_WATCH_HISTORY">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.USAGE.WATCH_HISTORY</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.USAGE.WATCH_HISTORY.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_USAGE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_HEALTH_HEART_RATE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.HEALTH.HEART_RATE</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.HEALTH.HEART_RATE.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_HEALTH"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#SensitiveData">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>SensitiveData</rdfs:label>
+    <rdfs:comment>FDO semantic class representing SensitiveData.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_COMM_MESSAGE_CONTENT">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.COMM.MESSAGE_CONTENT</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.COMM.MESSAGE_CONTENT.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_COMM"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://example.org/fdo#recipientType">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
@@ -346,17 +242,54 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Type of recipient receiving personal data.</rdfs:comment>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#source">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>source</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#PrivacyPolicy"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Source document or source location.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#Recipient">
+  <rdf:Description rdf:about="http://example.org/fdo#Justification">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>Recipient</rdfs:label>
-    <rdfs:comment>FDO semantic class representing Recipient.</rdfs:comment>
+    <rdfs:label>Justification</rdfs:label>
+    <rdfs:comment>FDO semantic class representing Justification.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_USAGE_COMMENT_CONTENT">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.USAGE.COMMENT_CONTENT</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.USAGE.COMMENT_CONTENT.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_USAGE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_OTHER">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.OTHER</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.OTHER.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_CONTACT_PHONE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.CONTACT.PHONE</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.CONTACT.PHONE.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_CONTACT"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#declaredByApplication">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>declaredByApplication</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#DeclaredData"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#Application"/>
+    <rdfs:comment>Connects declared data to the application declaring it.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_CONTACT_EMAIL">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.CONTACT.EMAIL</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.CONTACT.EMAIL.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_CONTACT"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_FILE_USER_FILES">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.FILE.USER_FILES</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.FILE.USER_FILES.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_FILE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#hasJustification">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>hasJustification</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Overreach"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#Justification"/>
+    <rdfs:comment>Connects an overreach finding to its justification.</rdfs:comment>
   </rdf:Description>
   <rdf:Description rdf:about="http://example.org/fdo#processedBy">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
@@ -365,53 +298,92 @@
     <rdfs:range rdf:resource="http://example.org/fdo#ProcessingActivity"/>
     <rdfs:comment>Connects personal data to the processing activity applied to it.</rdfs:comment>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#description">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>description</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#FDOEntity"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Human-readable description of an ontology entity.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#Justification">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>Justification</rdfs:label>
-    <rdfs:comment>FDO semantic class representing Justification.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#text">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>text</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#FDOEntity"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Text of a policy clause or justification.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#User">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>User</rdfs:label>
-    <rdfs:comment>FDO semantic class representing User.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#Consent">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>Consent</rdfs:label>
-    <rdfs:comment>FDO semantic class representing Consent.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#section">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label>section</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#PolicyClause"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Policy section containing the clause.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#hasUser">
+  <rdf:Description rdf:about="http://example.org/fdo#hasRetentionPolicy">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label>hasUser</rdfs:label>
-    <rdfs:domain rdf:resource="http://example.org/fdo#Application"/>
-    <rdfs:range rdf:resource="http://example.org/fdo#User"/>
-    <rdfs:comment>Connects an application to its user context.</rdfs:comment>
+    <rdfs:label>hasRetentionPolicy</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#PersonalData"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#RetentionPolicy"/>
+    <rdfs:comment>Connects personal data to its retention policy.</rdfs:comment>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/fdo#PolicyClause">
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_DEVICE_SMART_HOME">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label>PolicyClause</rdfs:label>
-    <rdfs:comment>FDO semantic class representing PolicyClause.</rdfs:comment>
+    <rdfs:label>DATA.DEVICE.SMART_HOME</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.DEVICE.SMART_HOME.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_DEVICE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#duration">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>duration</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#RetentionPolicy"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Retention duration associated with personal data.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#supportedByPolicy">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>supportedByPolicy</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#PolicyClause"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#PrivacyPolicy"/>
+    <rdfs:comment>Connects a policy clause to its source privacy policy.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_HEALTH">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.HEALTH</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.HEALTH.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#Recipient">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Recipient</rdfs:label>
+    <rdfs:comment>FDO semantic class representing Recipient.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#AncillaryData">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>AncillaryData</rdfs:label>
+    <rdfs:comment>Declared data types and purposes covered by the cross-application ancillary baseline.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_DEVICE_SENSOR">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.DEVICE.SENSOR</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.DEVICE.SENSOR.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_DEVICE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#collectsData">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>collectsData</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Application"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#PersonalData"/>
+    <rdfs:comment>Connects an application to personal data it collects.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#sensitivityCategory">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>sensitivityCategory</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#PersonalData"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Category describing the sensitivity of personal data.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#source">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>source</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#PrivacyPolicy"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Source document or source location.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_USAGE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.USAGE</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.USAGE.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#Risk">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Risk</rdfs:label>
+    <rdfs:comment>FDO semantic class representing Risk.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_MEDIA_VIDEO">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.MEDIA.VIDEO</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.MEDIA.VIDEO.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_MEDIA"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://example.org/fdo#expectedDataPurpose">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
@@ -420,6 +392,160 @@
     <rdfs:range rdf:resource="http://example.org/fdo#Purpose"/>
     <rdfs:comment>Connects expected data to its semantic processing purpose.</rdfs:comment>
   </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#expectedData">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>expectedData</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Function"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#ExpectedData"/>
+    <rdfs:comment>Connects a function to expected data requirements.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#name">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>name</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Application"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Human-readable name of an ontology entity.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_ACCOUNT_USER_ID">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.ACCOUNT.USER_ID</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.ACCOUNT.USER_ID.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_ACCOUNT"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_USAGE_ACTIVITY_HISTORY">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.USAGE.ACTIVITY_HISTORY</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.USAGE.ACTIVITY_HISTORY.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_USAGE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#necessity">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>necessity</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#ExpectedData"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Necessity level of expected data.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_USAGE_POST_CONTENT">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.USAGE.POST_CONTENT</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.USAGE.POST_CONTENT.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_USAGE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#UserRight">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>UserRight</rdfs:label>
+    <rdfs:comment>FDO semantic class representing UserRight.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_CONTACT_ADDRESS">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.CONTACT.ADDRESS</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.CONTACT.ADDRESS.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_CONTACT"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#purpose">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>purpose</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#ExpectedData"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Purpose associated with expected data.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#PrivacyPolicy">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>PrivacyPolicy</rdfs:label>
+    <rdfs:comment>FDO semantic class representing PrivacyPolicy.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#Ontology">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <rdfs:label>Functional Data Ontology</rdfs:label>
+    <rdfs:comment>Ontology for semantic analysis of application functionality, personal data processing, privacy policy evidence, and Functional Data Overreach.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_USAGE_TRIP_DETAILS">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.USAGE.TRIP_DETAILS</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.USAGE.TRIP_DETAILS.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_USAGE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#text">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>text</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#PolicyClause"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Text of a policy clause or justification.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_ACCOUNT">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.ACCOUNT</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.ACCOUNT.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_FINANCIAL_PAYMENT">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.FINANCIAL.PAYMENT</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.FINANCIAL.PAYMENT.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_FINANCIAL"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#User">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>User</rdfs:label>
+    <rdfs:comment>FDO semantic class representing User.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#hasUser">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>hasUser</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Application"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#User"/>
+    <rdfs:comment>Connects an application to its user context.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_HEALTH_ACTIVITY">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.HEALTH.ACTIVITY</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.HEALTH.ACTIVITY.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_HEALTH"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_MEDIA_PHOTO">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.MEDIA.PHOTO</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.MEDIA.PHOTO.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_MEDIA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_CONTACTS">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.CONTACTS</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.CONTACTS.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_MEDIA_CAMERA">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.MEDIA.CAMERA</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.MEDIA.CAMERA.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_MEDIA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_LOCATION_APPROXIMATE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.LOCATION.APPROXIMATE</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.LOCATION.APPROXIMATE.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_LOCATION"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#sharing">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>sharing</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#DeclaredData"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Sharing information associated with declared data.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#requiresData">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>requiresData</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Function"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#PersonalData"/>
+    <rdfs:comment>Connects a function to data reasonably required for that function.</rdfs:comment>
+  </rdf:Description>
   <rdf:Description rdf:about="http://example.org/fdo#reason">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
     <rdfs:label>reason</rdfs:label>
@@ -427,9 +553,262 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Reason explaining an FDO finding.</rdfs:comment>
   </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#PolicyClause">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>PolicyClause</rdfs:label>
+    <rdfs:comment>FDO semantic class representing PolicyClause.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#declaredData">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>declaredData</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Application"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#DeclaredData"/>
+    <rdfs:comment>Connects an application to data declared in its privacy policy.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_USAGE_CART_ACTIVITY">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.USAGE.CART_ACTIVITY</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.USAGE.CART_ACTIVITY.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_USAGE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_USAGE_ASSIGNMENT_CONTENT">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.USAGE.ASSIGNMENT_CONTENT</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.USAGE.ASSIGNMENT_CONTENT.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_USAGE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_USAGE_SEARCH_HISTORY">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.USAGE.SEARCH_HISTORY</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.USAGE.SEARCH_HISTORY.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_USAGE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#hasConsent">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>hasConsent</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Application"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#Consent"/>
+    <rdfs:comment>Connects an application to a consent record.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_HEALTH_APPOINTMENT">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.HEALTH.APPOINTMENT</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.HEALTH.APPOINTMENT.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_HEALTH"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DeclaredData">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DeclaredData</rdfs:label>
+    <rdfs:comment>FDO semantic class representing DeclaredData.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#PersonalData">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>PersonalData</rdfs:label>
+    <rdfs:comment>FDO semantic class representing PersonalData.</rdfs:comment>
+    <rdfs:comment>Data type taxonomy class for PersonalData.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_GAMING_GAMEPLAY">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.GAMING.GAMEPLAY</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.GAMING.GAMEPLAY.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_GAMING"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#expectedDataType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>expectedDataType</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#ExpectedData"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#PersonalData"/>
+    <rdfs:comment>Connects expected data to the semantic personal data concept it represents.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#score">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>score</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Risk"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:comment>Numerical risk score.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_GAMING">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.GAMING</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.GAMING.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#hasRisk">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>hasRisk</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Overreach"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#Risk"/>
+    <rdfs:comment>Connects an overreach finding to an associated privacy risk.</rdfs:comment>
+  </rdf:Description>
   <rdf:Description rdf:about="http://example.org/fdo#FDOEntity">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:label>FDOEntity</rdfs:label>
     <rdfs:comment>FDO semantic class representing FDOEntity.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#category">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>category</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Application"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Category of an application.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_CONTACT_PHONE_EMAIL">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.CONTACT.PHONE_EMAIL</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.CONTACT.PHONE_EMAIL.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_CONTACT"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#expectedForFunction">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>expectedForFunction</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#ExpectedData"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#Function"/>
+    <rdfs:comment>Connects expected data to the function for which it is expected.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_COMM">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.COMM</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.COMM.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_HEALTH_RECORD">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.HEALTH.RECORD</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.HEALTH.RECORD.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_HEALTH"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DataType</rdfs:label>
+    <rdfs:comment>Root class for canonical data-type taxonomy classes.</rdfs:comment>
+    <rdfs:comment>Data type taxonomy class for DataType.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_ACCOUNT_GOOGLE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.ACCOUNT.GOOGLE</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.ACCOUNT.GOOGLE.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_ACCOUNT"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_FINANCIAL">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.FINANCIAL</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.FINANCIAL.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_AUTH_SECRET_KEY">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.AUTH.SECRET_KEY</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.AUTH.SECRET_KEY.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_AUTH"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_HEALTH_PROVIDER_PREFERENCES">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.HEALTH.PROVIDER_PREFERENCES</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.HEALTH.PROVIDER_PREFERENCES.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_HEALTH"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#Overreach">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Overreach</rdfs:label>
+    <rdfs:comment>FDO semantic class representing Overreach.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_DEVICE_ID">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.DEVICE.ID</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.DEVICE.ID.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_DEVICE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_USAGE_LESSON_ACTIVITY">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.USAGE.LESSON_ACTIVITY</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.USAGE.LESSON_ACTIVITY.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_USAGE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_USAGE_ACTIVITY_LOGS">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.USAGE.ACTIVITY_LOGS</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.USAGE.ACTIVITY_LOGS.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_USAGE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_DEVICE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.DEVICE</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.DEVICE.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#concernsData">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label>concernsData</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#Overreach"/>
+    <rdfs:range rdf:resource="http://example.org/fdo#PersonalData"/>
+    <rdfs:comment>Connects an overreach finding to the data involved.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_LOCATION_PRECISE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.LOCATION.PRECISE</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.LOCATION.PRECISE.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_LOCATION"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#description">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>description</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#FDOEntity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Human-readable description of an ontology entity.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_HEALTH_PERSONAL_HEALTH">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.HEALTH.PERSONAL_HEALTH</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.HEALTH.PERSONAL_HEALTH.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_HEALTH"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#section">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>section</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#PolicyClause"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Policy section containing the clause.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#Purpose">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>Purpose</rdfs:label>
+    <rdfs:comment>FDO semantic class representing Purpose.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#ExpectedData">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>ExpectedData</rdfs:label>
+    <rdfs:comment>FDO semantic class representing ExpectedData.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_CONTACT">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.CONTACT</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.CONTACT.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_LOCATION">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.LOCATION</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.LOCATION.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_HEALTH_VITALS">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.HEALTH.VITALS</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.HEALTH.VITALS.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_HEALTH"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#DataType_DATA_MEDIA_AUDIO_VIDEO">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label>DATA.MEDIA.AUDIO_VIDEO</rdfs:label>
+    <rdfs:comment>Data type taxonomy class for DATA.MEDIA.AUDIO_VIDEO.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://example.org/fdo#DataType_DATA_MEDIA"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/fdo#sensitive">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label>sensitive</rdfs:label>
+    <rdfs:domain rdf:resource="http://example.org/fdo#PersonalData"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment>Indicates whether a data type is sensitive.</rdfs:comment>
   </rdf:Description>
 </rdf:RDF>

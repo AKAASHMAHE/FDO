@@ -1,6 +1,10 @@
 from __future__ import annotations
 
-from .fdo_detection_queries import FDO_DETECTION_QUERY
+from .fdo_detection_queries import (
+    COVERED_QUERY,
+    FDO_DETECTION_QUERY,
+    UNCOVERED_QUERY,
+)
 from .fuseki_service import FusekiService
 
 
@@ -22,22 +26,42 @@ class FusekiSemanticDetector:
         Execute the semantic FDO detection query against Fuseki.
         """
 
-        result = self.service.query(FDO_DETECTION_QUERY)
+        return self._decode(self.service.query(FDO_DETECTION_QUERY))
 
-        findings = []
+    def detect_covered(self) -> list[dict]:
+        return self._decode(self.service.query(COVERED_QUERY))
 
-        for binding in result["results"]["bindings"]:
-            findings.append(
-                {
-                    "expected_data": binding["expectedData"]["value"],
-                    "declared_data": binding["declaredData"]["value"],
-                    "expected_type": binding["expectedType"]["value"],
-                    "declared_type": binding["declaredType"]["value"],
-                    "expected_purpose": binding["expectedPurpose"]["value"],
-                    "declared_purpose": binding["declaredPurpose"]["value"],
-		    "application": binding["application"]["value"],
-                    "function": binding["function"]["value"],
-                }
-            )
+    def detect_uncovered(self) -> list[dict]:
+        return self._decode(self.service.query(UNCOVERED_QUERY))
 
-        return findings
+    @staticmethod
+    def _decode(result: dict) -> list[dict]:
+        return [
+            {
+                key: binding.get(variable, {}).get("value")
+                for key, variable in {
+                    "application": "application",
+                    "application_id": "applicationId",
+                    "function": "function",
+                    "function_id": "functionId",
+                    "function_name": "functionName",
+                    "expected_data": "expectedData",
+                    "expected_id": "expectedId",
+                    "expected_type": "expectedType",
+                    "expected_purpose": "expectedPurpose",
+                    "expected_necessity": "expectedNecessity",
+                    "expected_class": "expectedClass",
+                    "declared_data": "declaredData",
+                    "declared_id": "declaredId",
+                    "declared_type": "declaredType",
+                    "declared_class": "declaredClass",
+                    "declared_purpose": "declaredPurpose",
+                    "extraction_status": "extractionStatus",
+                    "confidence": "confidence",
+                    "evidence_text": "evidenceText",
+                    "entity": "entity",
+                    "type_relation": "typeRelation",
+                }.items()
+            }
+            for binding in result["results"]["bindings"]
+        ]

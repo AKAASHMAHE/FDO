@@ -1,0 +1,20 @@
+app,policy_id,existing_source_identifier,suggested_official_policy_url,needs_human_confirmation
+Google Classroom,POL-EDU-01,,https://policies.google.com/privacy,true
+Google Fit,POL-FIT-02,Google Privacy Policy + Google Fit Help,https://policies.google.com/privacy,true
+Google Home,POL-UTL-02,Google Home & Nest Privacy Hub,https://policies.google.com/privacy,true
+Google Maps,POL-NAV-01,Google Privacy Policy + Product Privacy Guide,https://policies.google.com/privacy,true
+Google Pay,POL-FIN-02,,https://policies.google.com/privacy,true
+Google Photos,POL-AMB-01,Google Privacy Policy + Google Photos Privacy Hub,https://policies.google.com/privacy,true
+Minecraft,POL-GAM-02,Minecraft Privacy Policy / Microsoft Privacy Statement,https://www.minecraft.net/en-us/privacy/gdpr,true
+MyChart,POL-HEA-01,,https://www.epic.com/privacy-policy/,true
+Netflix,POL-STR-01,Netflix Help Center,https://help.netflix.com/legal/privacy,true
+PUBG MOBILE,POL-GAM-01,PUBG MOBILE Privacy Policy linked from official site/store,https://www.pubgmobile.com/privacy.html,true
+PayPal,POL-FIN-01,,https://www.paypal.com/us/legalhub/privacy-full,true
+Reddit,POL-SOC-02,,https://www.reddit.com/policies/privacy-policy,true
+Telegram,POL-COM-02,,https://telegram.org/privacy,true
+Uber,POL-TRV-02,Uber Data Explainer,https://www.uber.com/legal/en/document/?name=privacy-notice,true
+Uber Eats,POL-FOD-01,Uber Privacy Overview / Uber Eats data help,https://www.uber.com/legal/en/document/?name=privacy-notice,true
+WeChat,POL-AMB-02,WeChat Privacy Protection Guidelines / official privacy source,https://www.wechat.com/en/privacy_policy.html,true
+WhatsApp,POL-COM-01,,https://www.whatsapp.com/legal/privacy-policy,true
+YouTube,POL-STR-02,,https://policies.google.com/privacy,true
+eBay,POL-ECO-02,,https://www.ebay.com/help/policies/member-behavior-policies/user-privacy-notice-privacy-policy?id=4260,true

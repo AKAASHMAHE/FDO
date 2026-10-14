@@ -77,6 +77,7 @@ class DBSemanticAnalysisService:
                 {
                     **finding,
                     "fdo_status": decision.fdo_status,
+                    "data_match_relation": decision.data_match_relation,
                     "confidence": (
                         decision.decision_confidence
                     ),

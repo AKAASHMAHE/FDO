@@ -3,7 +3,7 @@
 
 **Institution:** Vellore Institute of Technology  
 **Document type:** IDF-B Technical Audit — Executive Summary  
-**Audit date:** 2025  
+**Audit date:** 2026-10-13  
 **Status:** Prototype / Research System
 
 ---
@@ -18,11 +18,11 @@ Mobile application privacy policies are long, legally dense documents that users
 
 The **FDO Privacy Project** implements a multi-layer automated pipeline that ingests a privacy policy URL, extracts structured data-use triples (data type → purpose → function), evaluates each triple against a formal ontology of functional necessity, and renders the findings in a React dashboard. The system combines:
 
-1. **Gemini 1.5 Flash LLM** (Google Generative AI API, `gemini-1.5-flash` model) with structured JSON prompts to extract data triples from raw policy text.
-2. **OWL 2 ontology** (`fdo_ontology.ttl`, 19 classes, 23 object properties, 23 data properties) defining `FunctionalDataObject`, `AppFunction`, `DataType`, `Purpose`, and their necessity relations.
+1. **Gemini 3.5 Flash Lite LLM** (Google GenAI API, `gemini-3.5-flash-lite` model) with structured JSON prompts to extract data triples from raw policy text.
+2. **OWL 2 ontology** (`FDO.owl`, 19 classes, 24 object properties, 23 data properties) defining `FunctionalDataObject`, `AppFunction`, `DataType`, `Purpose`, and their necessity relations.
 3. **Apache Jena Fuseki 6.2.0** as an RDF triplestore, configured with `OWLFBRuleReasoner` inference in `fdo-reasoning.ttl`, used for SPARQL-based overreach detection via `FDO_DETECTION_QUERY`.
 4. **Deterministic decision engine** (`evaluate_fdo_decision()`, `fdo_decision_service.py:27–147`) — 6 explicit if/elif rules shared by both the relational and semantic analysis branches.
-5. **FastAPI backend** (13 REST endpoints) backed by **PostgreSQL** (SQLAlchemy ORM, 8 tables) and a **React/Vite** single-page dashboard.
+5. **FastAPI backend** (13 REST endpoints) backed by **SQLite** (SQLAlchemy ORM, 11 tables) and a **React/Vite** single-page dashboard.
 
 ---
 
@@ -31,14 +31,14 @@ The **FDO Privacy Project** implements a multi-layer automated pipeline that ing
 | Feature | Status |
 |---|---|
 | Policy text ingestion via URL (requests + BeautifulSoup) | Implemented-verified |
-| Gemini 1.5 Flash structured extraction (data triples) | Implemented-verified (requires API key) |
+| Gemini 3.5 Flash Lite structured extraction (data triples) | Implemented-verified (requires API key) |
 | Fallback regex extraction (4-keyword scan) | Implemented-verified |
 | OWL ontology loaded into Fuseki at runtime | Implemented-verified (Fuseki must be started manually) |
 | SPARQL overreach detection (`FDO_DETECTION_QUERY`) | Implemented-verified (Fuseki-dependent) |
 | 6-rule FDO decision engine | Implemented-verified |
 | Evidence scoring (base + purpose-compat + function-match) | Implemented-verified |
 | Purpose normalization (14-category taxonomy) | Implemented-verified |
-| PostgreSQL persistence (8-table schema) | Implemented-verified |
+| SQLite persistence (11-table schema) | Implemented-verified |
 | FastAPI REST API (13 endpoints) | Implemented-verified |
 | React dashboard (single-page, component-based) | Implemented-verified |
 | Cross-application policy comparison | **Not-found** |
@@ -51,11 +51,11 @@ The **FDO Privacy Project** implements a multi-layer automated pipeline that ing
 
 ```
 URL → PolicyIngestionService (requests/BS4)
-    → GeminiExtractor (gemini-1.5-flash, structured JSON prompt)
+    → GeminiExtractor (gemini-3.5-flash-lite, structured JSON prompt)
     → ComparisonService (normalize, classify, purpose-compat scoring)
-    → [Relational branch] evaluate_fdo_decision() → PostgreSQL
+    → [Relational branch] evaluate_fdo_decision() → SQLite
     → [Semantic branch]  RDFGraphBuilder → Fuseki → FDO_DETECTION_QUERY
-                         → semantic_decision_adapter → evaluate_fdo_decision() → PostgreSQL
+                         → semantic_decision_adapter → evaluate_fdo_decision() → SQLite
     → React frontend (App.jsx, GroupedSemanticCard, HistoryPanel)
 ```
 
@@ -70,12 +70,12 @@ Both branches converge on the **same deterministic decision function**. If Fusek
 | Ontology + purpose | 155 | 155 | 0 | No external dependency |
 | Integration | 126 | 126 | 0 | No external dependency |
 | SPARQL/semantic | 45 | 45 | 0 | No external dependency |
-| Fuseki-dependent | 31 | 28 | 3+1 | Fuseki offline → `ConnectionRefusedError` |
-| Jena reasoning | 4 | 0 | 4 | Fuseki offline |
-| API semantic persist | 3 | 1 | 2 | Fuseki offline |
-| **Total** | **397** | **356** | **41** | |
+| Fuseki-dependent (FAILED) | 17 | 0 | 17 | Fuseki offline → `ConnectionRefusedError` |
+| Fuseki-dependent (ERROR) | 7 | 0 | 7 | Fuseki offline → module-level `ConnectionRefusedError` |
+| Remaining offline tests | 47 | 47 | 0 | No external dependency |
+| **Total** | **397** | **373** | **24** | |
 
-All 356 Fuseki-independent tests pass. All 41 failures are caused by `localhost:3030` being unreachable, not by logic errors.
+All 373 Fuseki-independent tests pass. All 24 failures/errors are caused by `localhost:3030` being unreachable, not by logic errors.
 
 ---
 

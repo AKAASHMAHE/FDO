@@ -1,10 +1,10 @@
-from app.database import SessionLocal
 from app.models.semantic_fdo_result import SemanticFDOResult
 from app.ontology.semantic_result_repository import SemanticResultRepository
 
 
-def test_semantic_result_repository_save_and_get():
-    db = SessionLocal()
+def test_semantic_result_repository_save_and_get(isolated_app_database):
+    _, isolated_session_local = isolated_app_database
+    db = isolated_session_local()
 
     analysis_id = "TEST-SEMANTIC-PERSISTENCE"
 

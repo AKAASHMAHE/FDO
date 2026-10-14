@@ -40,6 +40,7 @@ class RichAnalysisResultResponse(BaseModel):
     declared_purpose: str | None = None
 
     data_match: str
+    data_match_relation: str = "NONE"
     purpose_compatibility: str
     functional_relationship: str
     functional_justification: str

@@ -327,6 +327,10 @@ class DeclaredData(FDOEntity):
     purpose: Optional[str] = None
     sharing: Optional[str] = None
     retention: Optional[str] = None
+    extraction_status: Optional[str] = None
+    confidence: Optional[float] = None
+    evidence_text: Optional[str] = None
+    entity: Optional[str] = None
 
 
 # ---------------------------------------------------------------------------

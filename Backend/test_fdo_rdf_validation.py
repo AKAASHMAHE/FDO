@@ -457,4 +457,6 @@ def test_empty_graph_is_valid():
     graph = build_rdf_graph()
 
     assert isinstance(graph, Graph)
-    assert len(graph) == 0
+    assert len(graph) > 0
+    assert any(graph.triples((None, RDFS.subClassOf, None)))
+    assert not list(graph.subjects(RDF.type, FDO.Application))

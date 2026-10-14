@@ -10,6 +10,7 @@ from .db_rdf_mapper import (
 )
 
 from .rdf_instance_builder import (
+    add_data_type_taxonomy,
     add_application,
     add_function,
     add_expected_data,
@@ -40,6 +41,7 @@ class DBRDFService:
             "fdo",
             "http://example.org/fdo#",
         )
+        add_data_type_taxonomy(graph)
 
         application_obj = application_from_record(
             application

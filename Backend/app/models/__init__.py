@@ -9,6 +9,7 @@ from app.models.comparison import Comparison
 from app.models.fdo_result import FDOResult
 from app.models.explanation import Explanation
 from app.models.semantic_fdo_result import SemanticFDOResult
+from app.models.overreach_candidate import OverreachCandidate
 __all__ = [
     "Application",
     "Function",
@@ -21,4 +22,5 @@ __all__ = [
     "FDOResult",
     "Explanation",
     "SemanticFDOResult",
+    "OverreachCandidate",
 ]

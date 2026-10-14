@@ -1,3 +1,12 @@
+import sqlite3
+from pathlib import Path
+
+from openpyxl import load_workbook
+
+from app.services.fdo_decision_service import (
+    FDODecisionInput,
+    evaluate_fdo_decision,
+)
 from app.services.comparison_service import (
     normalize_purpose,
     classify_purpose,
@@ -173,7 +182,102 @@ def test_unknown_purpose_is_conservative():
     assert evaluate_purpose_compatibility(
         "navigation",
         "completely unknown purpose",
+    ) == "UNKNOWN"
+
+
+def test_known_unknown_purpose_is_unknown():
+    assert evaluate_purpose_compatibility(
+        "navigation",
+        "an unclassified purpose",
+    ) == "UNKNOWN"
+
+
+def test_unknown_unknown_purpose_is_unknown():
+    assert evaluate_purpose_compatibility(
+        "an unclassified purpose",
+        "another unclassified purpose",
+    ) == "UNKNOWN"
+
+
+def test_known_incompatible_purposes_remain_incompatible():
+    assert evaluate_purpose_compatibility(
+        "navigation",
+        "targeted advertising",
     ) == "INCOMPATIBLE"
+
+
+def test_unknown_purpose_routes_decision_to_ambiguous():
+    decision = evaluate_fdo_decision(
+        FDODecisionInput(
+            expected_id="expected-1",
+            application_id="app-1",
+            expected_data_type="DATA.LOCATION",
+            expected_necessity="REQUIRED",
+            expected_purpose="navigation",
+            declared_evidence_id="evidence-1",
+            declared_data_type="DATA.LOCATION",
+            declared_purpose="unclassified",
+            data_match="EXACT_MATCH",
+            purpose_compatibility="UNKNOWN",
+            functional_relationship="RELATED",
+            evidence_status="EXTRACTED",
+        )
+    )
+
+    assert decision.fdo_status == "AMBIGUOUS"
+
+
+def test_every_expected_purpose_is_classified():
+    repository_root = Path(__file__).resolve().parents[1]
+    workbook = load_workbook(
+        repository_root
+        / "DATA"
+        / "FDO-Privacy_Final_Stage3_Dataset_CLEANED.xlsx",
+        read_only=True,
+        data_only=True,
+    )
+    worksheet = workbook["Expected Data"]
+    rows = worksheet.iter_rows(values_only=True)
+    headers = next(rows)
+    purpose_index = headers.index("Purpose")
+    purposes = {
+        str(row[purpose_index]).strip()
+        for row in rows
+        if row[purpose_index] is not None
+    }
+
+    connection = sqlite3.connect(
+        repository_root / "Backend" / "fdo_privacy.db"
+    )
+    try:
+        purposes.update(
+            row[0]
+            for row in connection.execute(
+                "SELECT DISTINCT expected_purpose "
+                "FROM expected_mappings "
+                "WHERE expected_purpose IS NOT NULL"
+            )
+        )
+    finally:
+        connection.close()
+
+    assert purposes
+    assert all(classify_purpose(purpose) for purpose in purposes)
+
+
+def test_expected_purpose_categories_include_domain_specific_phrases():
+    expected_categories = {
+        "File storage/sync": "FILE_STORAGE_SYNC",
+        "Device control": "DEVICE_CONTROL",
+        "Activity tracking": "ACTIVITY_TRACKING",
+        "Fitness tracking": "FITNESS_TRACKING",
+        "Search/localization": "SEARCH_LOCATION",
+        "Security/verification": "SECURITY",
+    }
+    assert {
+        purpose: classify_purpose(purpose)
+        for purpose in expected_categories
+    } == expected_categories
 
 def test_classify_purposes_single_category():
     result = classify_purposes("directions")

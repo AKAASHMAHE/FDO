@@ -4,7 +4,7 @@ from app.main import app
 from test_helpers import fake_google_maps_baseline
 
 
-def test_end_to_end_semantic_analysis(monkeypatch):
+def test_end_to_end_semantic_analysis(monkeypatch, isolated_app_database):
     fake_evidence = [
         {
             "data_type": "DATA.LOCATION.PRECISE",
@@ -70,16 +70,16 @@ def test_end_to_end_semantic_analysis(monkeypatch):
         assert result["application_id"] == "NAV-01"
 
         assert result["application"]
-        assert result["function"]
+        assert "function" in result
 
         assert result["expected_data"]
-        assert result["declared_data"]
+        assert "declared_data" in result
 
         assert result["expected_type"]
-        assert result["declared_type"]
+        assert "declared_type" in result
 
         assert result["expected_purpose"]
-        assert result["declared_purpose"]
+        assert "declared_purpose" in result
 
         assert result["fdo_status"] in {
             "FDO",

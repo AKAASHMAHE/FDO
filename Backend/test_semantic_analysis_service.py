@@ -21,7 +21,8 @@ def test_semantic_analysis_service_returns_fdo_result():
     result = results[0]
 
     assert result["fdo_status"] == "FDO"
-    assert result["confidence"] == 0.80
+    assert result["confidence"] == 0.85
+    assert result["data_match_relation"] == "NARROWER_EVIDENCE"
     assert result["expected_type"] == "location"
     assert result["declared_type"] == "precise_location"
     assert result["expected_purpose"] == "navigation"

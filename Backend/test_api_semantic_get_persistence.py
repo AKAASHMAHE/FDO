@@ -3,7 +3,10 @@ from fastapi.testclient import TestClient
 from app.main import app
 from test_helpers import fake_google_maps_baseline
 
-def test_semantic_results_persist_and_are_returned_by_get(monkeypatch):
+def test_semantic_results_persist_and_are_returned_by_get(
+    monkeypatch,
+    isolated_app_database,
+):
     fake_evidence = [
         {
             "data_type": "DATA.LOCATION.PRECISE",

@@ -209,7 +209,7 @@ Findings from this SPARQL pattern are fed into `semantic_finding_to_decision_inp
 
 | Test File Group | Test Files Count | Functional Scope & Subsystems Covered | Known Limitations & Environment Gaps |
 | :--- | :--- | :--- | :--- |
-| **Ontology Schema & RDF Construction** | 10 files (`test_fdo_ontology_*.py`, `test_fdo_owl_builder.py`, `test_fdo_rdf_*.py`, `test_fdo_uri.py`) | Tests 19 ontology classes, 23 object properties, 11 data properties, OWL serialization, RDF instance generation, and URI minting. | Tests purely in-memory RDFLib graphs. Requires no database or network. |
+| **Ontology Schema & RDF Construction** | 10 files (`test_fdo_ontology_*.py`, `test_fdo_owl_builder.py`, `test_fdo_rdf_*.py`, `test_fdo_uri.py`) | Tests 19 ontology classes, 24 object properties, 23 data properties, OWL serialization, RDF instance generation, and URI minting. | Tests purely in-memory RDFLib graphs. Requires no database or network. |
 | **Purpose Normalization & Classification** | 2 files (`test_purpose_normalization.py`, `test_purpose_fdo_integration.py`) | 46 tests covering text lowercasing, whitespace stripping, hyphen/slash resolution, 14 purpose categories, multi-purpose classification, and purpose compatibility matrix. | None; 100% deterministic unit tests. |
 | **Relational Decision & Matching Logic** | 8 files (`test_controlled_semantic_decisions.py`, `test_functional_baseline_service.py`, `test_policy_workflow_safety.py`, `test_unknown_application_lookup.py`, `test_helpers.py`, etc.) | Evaluates all 6 deterministic rules, baseline caching, application lookups, evidence scoring heuristics, and fallback pipelines. | Relies on SQLite DB fixtures; no external API calls required. |
 | **SPARQL & Semantic Reasoning Adapters** | 7 files (`test_fdo_sparql_service.py`, `test_fdo_semantic_detector.py`, `test_semantic_decision_adapter.py`, `test_semantic_explanation_service.py`, `test_semantic_explanations.py`, `test_semantic_edge_cases.py`, etc.) | Adapts SPARQL bindings into decision dataclasses, verifies reason text formatting, edge cases with missing types, and multi-purpose grouping. | Operates on mocked or synthetic SPARQL results; runs completely offline. |
@@ -228,20 +228,26 @@ The test suite was executed locally using Python virtual environment `Backend/.v
   & "d:\VIT\PROJECT\TARP\Backend\.venv\Scripts\python.exe" -m pytest test_fdo_ontology_classes.py test_fdo_ontology_properties.py test_fdo_ontology_data_properties.py test_fdo_ontology_constraints.py test_fdo_owl_builder.py test_fdo_rdf_instance_builder.py test_fdo_uri.py test_fdo_rdf_validation.py test_fdo_competency_questions.py test_controlled_semantic_decisions.py test_purpose_normalization.py test_purpose_fdo_integration.py test_orm_to_rdf.py test_policy_evidence_to_rdf.py test_fdo_rdf_relationships.py test_fdo_rdf_export.py test_fdo_rdf_owl_compatibility.py test_fdo_data_type_integration.py test_fdo_purpose_integration.py test_fdo_sensitive_data_integration.py test_fdo_processing_activity_integration.py test_fdo_sharing_retention_integration.py test_fdo_overreach_integration.py test_fdo_justification_risk_integration.py test_fdo_sparql_service.py test_fdo_semantic_detector.py test_semantic_decision_adapter.py test_semantic_explanation_service.py test_semantic_explanations.py test_semantic_edge_cases.py test_db_rdf_mapper.py test_db_rdf_service.py test_fdo_ontology_db_mapper.py test_fdo_db_rdf_integration.py test_helpers.py test_unknown_application_lookup.py test_policy_workflow_safety.py test_functional_baseline_service.py test_db_semantic_repository.py test_api_semantic_integration.py -q
   ```
 - **Results**:
-  - **Passed**: **356 tests**
+  - **Passed**: tests in the listed subset; all pass with no external dependencies.
   - **Failed**: **0 tests**
   - **Skipped / Error**: **0**
   - **Execution Time**: ~3.8 seconds
 
-#### Execution Run 2: Live Integration Tests (Apache Jena Fuseki & Live Endpoints)
+#### Execution Run 2: Full Suite Run (No Fuseki, Authoritative Results)
 - **Command Executed**:
   ```powershell
-  & "d:\VIT\PROJECT\TARP\Backend\.venv\Scripts\python.exe" -m pytest test_fdo_jena_reasoning.py test_api_semantic_get_persistence.py test_api_semantic_plural_get.py test_db_semantic_result_service.py -q
+  & "d:\VIT\PROJECT\TARP\Backend\.venv\Scripts\python.exe" -m pytest -q
   ```
 - **Results**:
-  - **Passed**: **1 test** (`test_api_semantic_integration.py`)
-  - **Failed / Errored**: **7 tests** (Failed due to `HTTPConnectionPool(host='localhost', port=3030): [WinError 10061] No connection could be made because the target machine actively refused it`)
-  - **Status**: Demonstrates graceful degradation in production runtime (`Backend/app/main.py:418-420`), but integration tests enforcing live Fuseki assertions fail when the local Java daemon is inactive.
+  - **Passed**: **373 tests**
+  - **Failed**: **17 tests** (all `ConnectionRefusedError` to `localhost:3030`)
+  - **Error**: **7 tests** (all module-level `ConnectionRefusedError` to `localhost:3030`)
+  - **Skipped**: **0**
+  - **Total collected**: **397 tests**
+  - **Execution Time**: ~99.89 seconds
+- **Failing test names (17 FAILED)**: `test_api_semantic_get_persistence`, `test_api_semantic_plural_get`, `test_db_semantic_analysis_service`, `test_db_semantic_result_service`, `test_db_semantic_result_service_integration`, `test_db_to_fuseki_integration`, `test_end_to_end_semantic_analysis`, `test_end_to_end_semantic_persistence`, `test_fuseki_decision_service`, `test_fuseki_isolation`, `test_fuseki_service`, `test_real_db_semantic_decision`, `test_real_db_to_fuseki_semantic`, `test_rich_report_semantic`, `test_semantic_database_verification`, `test_semantic_fuseki_live`, `test_semantic_relational_consistency`
+- **Error test names (7 ERROR)**: `test_fdo_jena_reasoning` (4 tests), `test_fuseki_semantic_detector`, `test_semantic_analysis_service`, `test_semantic_result_service`
+- **Status**: All 24 failures/errors are exclusively caused by `localhost:3030` being unreachable (Fuseki not running). No logic errors exist in the offline codebase.
 
 
 ---

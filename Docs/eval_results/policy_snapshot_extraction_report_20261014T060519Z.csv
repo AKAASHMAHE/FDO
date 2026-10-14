@@ -1,0 +1,30 @@
+app,policy_id,snapshot_status,capture_method,scope,character_count,chunk_count,extracted_rows,distinct_data_types,counts_by_purpose_category,unclassified_purpose_rows,data_other_rows,umbrella_same_hash_policy_count,umbrella_same_hash_policy_ids,extraction_model,extraction_method,run_id,reason
+Booking.com,POL-TRV-01,CAPTURED,LIVE,full_policy,74853,10,6,"[""LOCATION""]",{},6,0,1,POL-TRV-01,gemini-3.5-flash-lite,REGEX_FALLBACK,695090e2-ab7b-4c3b-8c1b-ea5d73ad3e37,
+DoorDash,POL-FOD-02,CAPTURED,LIVE,full_policy,11667,2,2,"[""LOCATION""]",{},2,0,1,POL-FOD-02,gemini-3.5-flash-lite,REGEX_FALLBACK,2db62f3f-34d7-4627-8d37-ddfaf69a0f25,
+Duolingo,POL-EDU-02,NEEDS_MANUAL_CAPTURE,LIVE,full_policy,8,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,"Manual capture required: direct capture was 8 characters; user reports rendered body 30,715 characters, but headless Playwright is unavailable and rendered text was not supplied as an import file."
+Google Authenticator,POL-UTL-01,CAPTURED,LIVE,full_policy,55726,9,14,"[""LOCATION"", ""LOCATION.APPROXIMATE""]","{""NAVIGATION"": 1, ""PERSONALIZATION"": 1, ""SEARCH_LOCATION"": 3}",9,0,2,POL-PRO-01;POL-UTL-01,gemini-3.5-flash-lite,REGEX_FALLBACK,43599136-43cc-4f97-8200-f83cb8713b49,
+Google Classroom,POL-EDU-01,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+Google Drive,POL-PRO-01,CAPTURED,LIVE,full_policy,55726,9,14,"[""LOCATION"", ""LOCATION.APPROXIMATE""]","{""NAVIGATION"": 1, ""PERSONALIZATION"": 1, ""SEARCH_LOCATION"": 3}",9,0,2,POL-PRO-01;POL-UTL-01,gemini-3.5-flash-lite,REGEX_FALLBACK,ffea513d-ef8d-496f-b39e-2c52e2d4d52c,
+Google Fit,POL-FIT-02,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+Google Home,POL-UTL-02,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+Google Maps,POL-NAV-01,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+Google Pay,POL-FIN-02,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+Google Photos,POL-AMB-01,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+Instagram,POL-SOC-01,NEEDS_MANUAL_CAPTURE,LIVE,full_policy,58,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,"Manual capture required: direct Instagram host yielded 58 characters; Meta Privacy Policy may cover Instagram, but its applicability/text was not verified for import."
+Microsoft OneDrive,POL-PRO-02,CAPTURED,LIVE,full_policy,214166,30,43,"[""LOCATION"", ""LOCATION.PRECISE""]","{""SEARCH_LOCATION"": 7}",36,0,1,POL-PRO-02,gemini-3.5-flash-lite,REGEX_FALLBACK,cc09676a-b282-415b-8cb6-723b1a36c939,
+Minecraft,POL-GAM-02,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+MyChart,POL-HEA-01,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+Netflix,POL-STR-01,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+PUBG MOBILE,POL-GAM-01,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+PayPal,POL-FIN-01,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+Practo,POL-HEA-02,NEEDS_MANUAL_CAPTURE,LIVE,full_policy,972,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,"Manual capture required: direct capture was 972 characters; user reports rendered body 53,584 characters, but headless Playwright is unavailable and rendered text was not supplied as an import file."
+Reddit,POL-SOC-02,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+Strava,POL-FIT-01,CAPTURED,LIVE,full_policy,27632,3,7,"[""LOCATION"", ""LOCATION.PRECISE""]",{},7,0,1,POL-FIT-01,gemini-3.5-flash-lite,REGEX_FALLBACK,92ff8c8d-d6ea-452e-98a1-0c708a4711bf,
+Telegram,POL-COM-02,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+Uber,POL-TRV-02,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+Uber Eats,POL-FOD-01,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+Waze,POL-NAV-02,CAPTURED,LIVE,full_policy,46806,6,14,"[""LOCATION"", ""LOCATION.APPROXIMATE""]","{""NAVIGATION"": 2}",12,0,1,POL-NAV-02,gemini-3.5-flash-lite,REGEX_FALLBACK,b3fc9923-05a3-4ec7-9f0f-a1dcbc446f95,
+WeChat,POL-AMB-02,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+WhatsApp,POL-COM-01,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+YouTube,POL-STR-02,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record
+eBay,POL-ECO-02,NO_SNAPSHOT,,,0,0,0,[],{},0,0,0,,gemini-3.5-flash-lite,NONE,,No snapshot record

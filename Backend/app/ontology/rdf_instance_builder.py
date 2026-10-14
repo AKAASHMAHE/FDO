@@ -18,7 +18,7 @@ Architecture:
 
 from typing import Iterable
 
-from rdflib import Graph, Literal, RDF, XSD
+from rdflib import Graph, Literal, RDF, RDFS, OWL, XSD
 
 from .classes import (
     Application,
@@ -67,6 +67,11 @@ from .db_rdf_mapper import (
     expected_data_from_record,
     declared_data_from_record,
 )
+from app.services.data_type_hierarchy import (
+    canonical_data_type_code,
+    hierarchy_edges,
+)
+from app.services.ancillary_baseline import is_ancillary_declaration
 # ============================================================
 # Helper
 # ============================================================
@@ -95,6 +100,30 @@ def _add_literal(graph, subject, predicate, value, datatype=None):
                 Literal(value),
             )
         )
+
+
+def data_type_class_uri(data_type: str):
+    canonical = canonical_data_type_code(data_type)
+    return FDO[f"DataType_{canonical.replace('.', '_')}"]
+
+
+def _taxonomy_class_uri(code: str):
+    if code == "PersonalData":
+        return FDO.PersonalData
+    if code == "DataType":
+        return FDO.DataType
+    return FDO[f"DataType_{code.replace('.', '_')}"]
+
+
+def add_data_type_taxonomy(graph: Graph) -> None:
+    for child, parent in hierarchy_edges():
+        child_uri = _taxonomy_class_uri(child)
+        parent_uri = _taxonomy_class_uri(parent)
+        graph.add((child_uri, RDF.type, OWL.Class))
+        graph.add((parent_uri, RDF.type, OWL.Class))
+        graph.add((child_uri, RDFS.subClassOf, parent_uri))
+    graph.add((FDO.DataType, RDF.type, OWL.Class))
+    graph.add((FDO.AncillaryData, RDF.type, OWL.Class))
 
 
 # ============================================================
@@ -219,6 +248,14 @@ def add_expected_data(graph: Graph, expected: ExpectedData):
     _add_literal(graph, subject, FDO.id, expected.id)
     _add_literal(graph, subject, FDO.name, expected.name)
     _add_literal(graph, subject, FDO.dataType, expected.data_type)
+    if expected.data_type:
+        graph.add(
+            (
+                subject,
+                FDO.dataTypeClass,
+                data_type_class_uri(expected.data_type),
+            )
+        )
     _add_literal(graph, subject, FDO.necessity, expected.necessity)
     _add_literal(graph, subject, FDO.purpose, expected.purpose)
 
@@ -243,9 +280,27 @@ def add_declared_data(graph: Graph, declared: DeclaredData):
     _add_literal(graph, subject, FDO.id, declared.id)
     _add_literal(graph, subject, FDO.name, declared.name)
     _add_literal(graph, subject, FDO.dataType, declared.data_type)
+    if declared.data_type:
+        graph.add(
+            (
+                subject,
+                FDO.dataTypeClass,
+                data_type_class_uri(declared.data_type),
+            )
+        )
     _add_literal(graph, subject, FDO.purpose, declared.purpose)
     _add_literal(graph, subject, FDO.sharing, declared.sharing)
     _add_literal(graph, subject, FDO.retention, declared.retention)
+    _add_literal(graph, subject, FDO.extractionStatus, declared.extraction_status)
+    _add_literal(graph, subject, FDO.confidence, declared.confidence, XSD.float)
+    _add_literal(graph, subject, FDO.text, declared.evidence_text)
+    _add_literal(graph, subject, FDO.entity, declared.entity)
+
+    if is_ancillary_declaration(
+        declared.data_type,
+        declared.purpose,
+    ):
+        graph.add((subject, RDF.type, FDO.AncillaryData))
 
     return subject
 
@@ -800,6 +855,8 @@ def build_rdf_graph(
     graph = Graph()
 
     graph.bind("fdo", FDO)
+    graph.bind("rdfs", "http://www.w3.org/2000/01/rdf-schema#")
+    add_data_type_taxonomy(graph)
 
     for application in applications or []:
         application = _convert_application_record(

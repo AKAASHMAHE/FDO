@@ -6,6 +6,7 @@ class AnalysisResultResponse(BaseModel):
     evidence_id: str | None
 
     data_match: str
+    data_match_relation: str = "NONE"
     purpose_compatibility: str
     functional_relationship: str
     functional_justification: str
