@@ -3,7 +3,10 @@ from fastapi.testclient import TestClient
 from app.main import app
 
 
-def test_analyze_endpoint_returns_semantic_results(monkeypatch):
+def test_analyze_endpoint_returns_semantic_results(
+    monkeypatch,
+    isolated_app_database,
+):
     fake_evidence = [
         {
             "data_type": "precise_location",

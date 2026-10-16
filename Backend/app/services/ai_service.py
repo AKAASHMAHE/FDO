@@ -2,6 +2,7 @@ import json
 import os
 from pathlib import Path
 
+from app.services.data_type_hierarchy import DATA_TYPE_ALIASES
 
 MODEL_NAME = "gemini-3.5-flash-lite"
 
@@ -21,19 +22,7 @@ ALLOWED_DATA_TYPES = {
 }
 
 
-DATA_TYPE_NORMALIZATION = {
-    "LOCATION.PRECISE": "DATA.LOCATION.PRECISE",
-    "LOCATION.APPROXIMATE": "DATA.LOCATION.APPROXIMATE",
-    "LOCATION": "DATA.LOCATION",
-    "CONTACTS": "DATA.CONTACTS",
-    "DEVICE": "DATA.DEVICE",
-    "ACCOUNT": "DATA.ACCOUNT",
-    "FINANCIAL": "DATA.FINANCIAL",
-    "HEALTH": "DATA.HEALTH",
-    "MEDIA": "DATA.MEDIA",
-    "USAGE": "DATA.USAGE",
-    "OTHER": "DATA.OTHER",
-}
+DATA_TYPE_NORMALIZATION = DATA_TYPE_ALIASES
 
 
 def _load_env_file() -> None:

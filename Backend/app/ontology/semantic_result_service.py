@@ -27,6 +27,7 @@ class SemanticResultService:
                     "expected_purpose": finding.get("expected_purpose"),
                     "declared_purpose": finding.get("declared_purpose"),
                     "fdo_status": decision.fdo_status,
+                    "data_match_relation": decision.data_match_relation,
                     "confidence": decision.decision_confidence,
                     "reason": decision.decision_reason,
                 }

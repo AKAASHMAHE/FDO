@@ -75,4 +75,8 @@ def declared_data_from_record(record) -> DeclaredData:
         purpose=_get(record, "purpose"),
         sharing=_get(record, "sharing"),
         retention=_get(record, "retention"),
+        extraction_status=_get(record, "extraction_status"),
+        confidence=_get(record, "confidence"),
+        evidence_text=_get(record, "evidence_text"),
+        entity=_get(record, "entity"),
     )

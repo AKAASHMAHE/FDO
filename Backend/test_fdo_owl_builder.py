@@ -2,6 +2,7 @@ from rdflib import RDF, RDFS, OWL, XSD
 
 from app.ontology.namespace import FDO
 from app.ontology.owl_builder import build_fdo_ontology
+from app.ontology.specification import get_fdo_specification
 
 
 def test_fdo_ontology_builds():
@@ -47,6 +48,25 @@ def test_core_fdo_classes_are_owl_classes():
             RDF.type,
             OWL.Class,
         ) in graph
+
+
+def test_every_specification_class_has_label_and_comment():
+    graph = build_fdo_ontology()
+
+    for class_name in get_fdo_specification().classes:
+        class_uri = FDO[class_name]
+        assert (class_uri, RDFS.label, None) in graph
+        assert (class_uri, RDFS.comment, None) in graph
+
+
+def test_personal_data_is_subclass_of_data_type_root():
+    graph = build_fdo_ontology()
+
+    assert (
+        FDO.PersonalData,
+        RDFS.subClassOf,
+        FDO.DataType,
+    ) in graph
 
 
 def test_core_object_properties_are_owl_object_properties():

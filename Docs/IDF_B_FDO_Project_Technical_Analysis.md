@@ -15,7 +15,7 @@ The **FDO Privacy Project** is an automated privacy policy compliance auditing s
 
 The codebase implements a dual-engine architecture:
 1. **Deterministic Relational Engine**: Performs pairwise comparisons between expected functional data needs and extracted policy disclosures using a 6-rule hierarchical expert system.
-2. **Semantic Knowledge Graph Engine**: Projects relational entities into an in-memory Resource Description Framework (RDF) knowledge graph conformant to a custom Web Ontology Language (OWL) schema (`fdo:`, 19 classes, 23 object properties, 23 data properties), queries semantic graph patterns via SPARQL in Apache Jena Fuseki, and adapts detected discrepancies into structured overreach findings.
+2. **Semantic Knowledge Graph Engine**: Projects relational entities into an in-memory Resource Description Framework (RDF) knowledge graph conformant to a custom Web Ontology Language (OWL) schema (`fdo:`, 19 classes, 24 object properties, 23 data properties), queries semantic graph patterns via SPARQL in Apache Jena Fuseki, and adapts detected discrepancies into structured overreach findings.
 
 The system combines zero-shot large language model inference (`gemini-3.5-flash-lite`) for automated policy disclosure extraction and conservative baseline synthesis with deterministic rule-based classifiers for purpose normalization, entity matching, and compliance adjudication. An interactive React single-page application (SPA) visualizes the results with explainable decision justifications.
 
@@ -184,7 +184,7 @@ The repository houses extensive empirical research datasets in `DATA/`:
 ### 10.1 Schema Definition
 - **Namespace**: `http://example.org/fdo#` (`Backend/app/ontology/namespace.py:11`). Instance URIs follow `http://example.org/fdo#resource/<type>/<id>` (`Backend/app/ontology/uri.py:19`).
 - **Classes (19)**: `FDOEntity` (root), `Application`, `Function`, `PersonalData`, `SensitiveData`, `ProcessingActivity`, `Purpose`, `Recipient`, `RetentionPolicy`, `User`, `UserRight`, `Consent`, `PrivacyPolicy`, `PolicyClause`, `ExpectedData`, `DeclaredData`, `Justification`, `Overreach`, `Risk`.
-- **Properties**: 23 Object Properties (`performsFunction`, `expectedData`, `declaredData`, etc.) and 23 Data Properties (`dataType`, `purpose`, `necessity`, `confidence`, etc.).
+- **Properties**: 24 Object Properties (`performsFunction`, `expectedData`, `declaredData`, etc.) and 23 Data Properties (`dataType`, `purpose`, `necessity`, `confidence`, etc.).
 - **Constraints**: 14 cardinality bounds (e.g. `Application performsFunction min 1 Function`, `Overreach concernsData exactly 1 PersonalData`) and 8 mandatory attribute rules.
 
 ### 10.2 SPARQL Detection
@@ -269,9 +269,10 @@ The system utilizes SQLite (`Backend/fdo_privacy.db`) via SQLAlchemy with 11 pri
 ## 15. Testing Results & Verification Audit
 
 - **Test Suite Structure**: 67 test files in `Backend/test_*.py` containing **397 collected tests** (`pytest 9.1.1`).
-- **Executed Unit & Offline Test Results**:
-  - **Command**: `pytest` across all ontology, baseline, purpose normalization, relational decision, and offline adapter test files (39 test files).
-  - **Result**: **356 Passed, 0 Failed, 0 Skipped** (Execution time: ~3.8 seconds).
+- **Full Suite Execution Results (No Fuseki)**:
+  - **Command**: `pytest -q` (all 67 test files, no Fuseki running).
+  - **Result**: **373 Passed, 17 Failed, 7 Errors, 0 Skipped** (Execution time: ~99.89 seconds).
+  - All 24 failures and errors are exclusively caused by `localhost:3030` being unreachable (Fuseki offline). No logic errors in offline code.
 - **Integration Test Behavior**:
   - Live tests requiring an active Apache Jena Fuseki daemon on `localhost:3030` fail with `ConnectionRefusedError` when Fuseki is not started locally.
   - Production runtime features graceful degradation: `Backend/app/main.py:418-420` catches Fuseki connection errors and completes relational analysis without crashing.
@@ -324,7 +325,7 @@ The system utilizes SQLite (`Backend/fdo_privacy.db`) via SQLAlchemy with 11 pri
 - `Backend/app/services/ai_service.py:81-248, 341-407` (Gemini prompts and structured output schemas)
 - `Backend/app/services/evidence_matcher.py:54-193` (Contextual evidence scoring heuristics)
 - `Backend/app/ontology/classes.py:1-260` (19 formal ontology dataclasses)
-- `Backend/app/ontology/properties.py:51-217` (23 object properties)
+- `Backend/app/ontology/properties.py:51-217` (24 object properties)
 - `Backend/app/ontology/data_properties.py:52-214` (23 data properties)
 - `Backend/app/ontology/fdo_detection_queries.py:5-37` (Core SPARQL detection pattern)
 - `Backend/app/ontology/db_semantic_result_service.py:155-254` (End-to-end semantic analysis pipeline)
@@ -372,7 +373,7 @@ The present invention addresses these deficiencies by introducing an end-to-end 
 - **Demonstrated Outcomes (Verified in Code & Tests)**:
   - Automated extraction of personal data collection statements from web privacy policies using `gemini-3.5-flash-lite` with fallback to deterministic regex segmentation.
   - Transformation of relational database entities into 2,700+ byte RDF Turtle graphs matching the FDO OWL ontology.
-  - Successful execution of 356 automated unit tests validating ontology properties, purpose normalization across 14 categories, and 6-rule decision logic.
+  - Successful execution of 373 automated unit tests (full suite, Fuseki offline) validating ontology properties, purpose normalization across 14 categories, and 6-rule decision logic.
   - Interactive visualization of function-grouped semantic overreach decisions in a React dashboard.
 - **Intended Outcomes (Future Scope / Unimplemented Extensions)**:
   - Fully automated derivation of application feature sets directly from app store descriptions or runtime binary analysis.
@@ -401,7 +402,7 @@ An ontology (specifically OWL/RDF) allows us to:
 
 ### Question 2: What do OWL, RDF, and SPARQL actually do in this project?
 **Answer**:  
-- **OWL (Web Ontology Language)**: Defines the formal vocabulary, class hierarchy (19 classes), and allowed relationships (23 object properties) in `Backend/ontology/FDO.owl`. It acts as the conceptual blueprint for what constitutes privacy overreach.
+- **OWL (Web Ontology Language)**: Defines the formal vocabulary, class hierarchy (19 classes), and allowed relationships (24 object properties) in `Backend/ontology/FDO.owl`. It acts as the conceptual blueprint for what constitutes privacy overreach.
 - **RDF (Resource Description Framework)**: Represents concrete data as directed graph triples `(Subject -> Predicate -> Object)`. For example, `(GoogleMaps -> performsFunction -> SearchFunction)` and `(SearchFunction -> expectedData -> LocationData)`. In our project, relational data is dynamically transformed into RDF graphs serialized in Turtle format (`.ttl`).
 - **SPARQL**: The W3C query language for RDF graphs. We execute SPARQL queries (`FDO_DETECTION_QUERY`) against our Apache Jena Fuseki triple store to find graph patterns where an application claims to perform a function but declares data collection that diverges from expected functional requirements.
 

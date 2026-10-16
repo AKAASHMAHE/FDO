@@ -8,6 +8,10 @@ from app.models.expected_mapping import ExpectedMapping
 from app.models.function import Function
 from app.models.policy_evidence import PolicyEvidence
 from app.models.policy_document import PolicyDocument
+from app.models.overreach_candidate import OverreachCandidate
+from app.models.comparison import Comparison
+from app.models.fdo_result import FDOResult
+from app.models.explanation import Explanation
 from app.services.analysis_runner import run_analysis
 from app.services.application_service import (
     find_application_by_name,
@@ -319,3 +323,89 @@ def test_semantic_and_relational_purpose_logic_match():
 
     assert relational == "COMPATIBLE"
     assert semantic.purpose_compatibility == relational
+
+
+def test_reverse_scan_persists_unrelated_type_as_fdo_candidate():
+    session = make_session()
+    mapping, policy = add_expected_location_mapping(session)
+    session.add(
+        PolicyEvidence(
+            evidence_id="EV-HEALTH-OVERREACH",
+            policy_id=policy.policy_id,
+            data_type="DATA.HEALTH",
+            purpose="marketing",
+            evidence_text="We collect health information for marketing.",
+            extraction_status="EXTRACTED",
+            confidence=0.9,
+        )
+    )
+    session.flush()
+
+    analysis = run_analysis(
+        session,
+        "ANALYSIS-HEALTH-OVERREACH",
+        mapping.application_id,
+        policy_id=policy.policy_id,
+    )
+
+    candidate = session.get(
+        OverreachCandidate,
+        "ANALYSIS-HEALTH-OVERREACH:OVERREACH:EV-HEALTH-OVERREACH",
+    )
+    assert analysis.total_mappings == 1
+    assert candidate is not None
+    assert candidate.data_type == "DATA.HEALTH"
+    assert candidate.data_match == "NO_MATCH"
+    assert candidate.functional_relationship == "RELATED"
+    assert candidate.purpose_compatibility == "INCOMPATIBLE"
+    assert candidate.fdo_status == "FDO"
+    assert candidate.decision_confidence == 0.8
+
+
+def test_reverse_scan_does_not_candidate_type_covered_by_expected():
+    session = make_session()
+    mapping, policy = add_expected_location_mapping(session)
+    session.add(
+        PolicyEvidence(
+            evidence_id="EV-PRECISE-LOCATION",
+            policy_id=policy.policy_id,
+            data_type="DATA.LOCATION.PRECISE",
+            purpose="navigation",
+            evidence_text="We collect precise location for navigation.",
+            extraction_status="EXTRACTED",
+            confidence=0.9,
+        )
+    )
+    session.flush()
+
+    run_analysis(
+        session,
+        "ANALYSIS-COVERED-TYPE",
+        mapping.application_id,
+        policy_id=policy.policy_id,
+    )
+
+    assert session.scalars(
+        select(OverreachCandidate).where(
+            OverreachCandidate.analysis_id == "ANALYSIS-COVERED-TYPE"
+        )
+    ).all() == []
+    comparison = session.get(
+        Comparison,
+        "ANALYSIS-COVERED-TYPE:EXP-MAPS-LOCATION",
+    )
+    assert comparison.data_match == "HIERARCHICAL_MATCH"
+    assert comparison.data_match_relation == "NARROWER_EVIDENCE"
+    result = session.get(
+        FDOResult,
+        f"RESULT-{comparison.comparison_id}",
+    )
+    assert result.fdo_status == "NOT_FDO"
+    explanation = session.get(
+        Explanation,
+        f"EXPLANATION-{result.result_id}",
+    )
+    assert explanation.data_match_relation == "NARROWER_EVIDENCE"
+    assert "Data-type relation: NARROWER_EVIDENCE" in (
+        explanation.explanation_text
+    )

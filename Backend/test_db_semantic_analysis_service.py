@@ -75,5 +75,6 @@ def test_db_semantic_analysis_service_detects_fdo(
     )
 
     assert result["fdo_status"] == "FDO"
-    assert result["confidence"] == 0.80
+    assert result["confidence"] == 0.85
+    assert result["data_match_relation"] == "NARROWER_EVIDENCE"
     assert result["reason"]

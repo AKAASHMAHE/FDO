@@ -2,12 +2,12 @@ from fastapi.testclient import TestClient
 from sqlalchemy import inspect
 
 from app.main import app
-from app.database import engine
 from test_helpers import fake_google_maps_baseline
 
 
 def test_semantic_results_are_persisted_in_database(
     monkeypatch,
+    isolated_app_database,
 ):
     fake_evidence = [
         {
@@ -62,17 +62,17 @@ def test_semantic_results_are_persisted_in_database(
     assert len(semantic_results) > 0
 
     # Verify the semantic table exists.
-    inspector = inspect(engine)
+    isolated_engine, isolated_session_local = isolated_app_database
+    inspector = inspect(isolated_engine)
 
     tables = inspector.get_table_names()
 
     assert "semantic_fdo_results" in tables
 
-    # Open the real application database.
-    from app.database import SessionLocal
+    # Query the isolated test database.
     from app.models.semantic_fdo_result import SemanticFDOResult
 
-    db = SessionLocal()
+    db = isolated_session_local()
 
     try:
         persisted = (

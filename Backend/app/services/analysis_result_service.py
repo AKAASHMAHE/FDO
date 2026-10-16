@@ -68,6 +68,7 @@ def get_analysis_results(
                 "expected_id": comparison.expected_id,
                 "evidence_id": comparison.evidence_id,
                 "data_match": comparison.data_match,
+                "data_match_relation": comparison.data_match_relation,
                 "purpose_compatibility": (
                     comparison.purpose_compatibility
                 ),

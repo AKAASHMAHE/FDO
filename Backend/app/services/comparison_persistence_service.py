@@ -25,6 +25,7 @@ def save_comparison(
         expected_id=expected_id,
         evidence_id=evidence_id,
         data_match=comparison.data_match,
+        data_match_relation=comparison.data_match_relation,
         purpose_compatibility=comparison.purpose_compatibility,
         functional_relationship=comparison.functional_relationship,
         functional_justification=(

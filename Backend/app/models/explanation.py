@@ -22,6 +22,12 @@ class Explanation(Base):
         nullable=False,
     )
 
+    data_match_relation: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+        default="NONE",
+    )
+
     evidence_summary: Mapped[str | None] = mapped_column(
         Text,
         nullable=True,

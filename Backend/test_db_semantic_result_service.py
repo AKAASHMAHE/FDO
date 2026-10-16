@@ -66,15 +66,15 @@ def test_db_semantic_result_service_returns_unified_results(
             )
 
             assert result["application"]
-            assert result["function"]
+            assert "function" in result
             assert result["expected_data"]
-            assert result["declared_data"]
+            assert "declared_data" in result
 
             assert result["expected_type"]
-            assert result["declared_type"]
+            assert "declared_type" in result
 
             assert result["expected_purpose"]
-            assert result["declared_purpose"]
+            assert "declared_purpose" in result
 
             assert result["fdo_status"] in {
                 "FDO",

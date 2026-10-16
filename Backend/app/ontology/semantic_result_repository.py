@@ -33,6 +33,10 @@ class SemanticResultRepository:
                 declared_data=result["declared_data"],
                 expected_type=result["expected_type"],
                 declared_type=result["declared_type"],
+                data_match_relation=result.get(
+                    "data_match_relation",
+                    "NONE",
+                ),
                 expected_purpose=result["expected_purpose"],
                 declared_purpose=result["declared_purpose"],
                 fdo_status=result["fdo_status"],

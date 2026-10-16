@@ -64,6 +64,7 @@ class ComparisonResponse(BaseModel):
     evidence_id: str | None
 
     data_match: str
+    data_match_relation: str = "NONE"
     purpose_compatibility: str
     functional_relationship: str
     functional_justification: str
@@ -93,6 +94,7 @@ class SemanticFDOResultResponse(BaseModel):
 
     expected_type: str
     declared_type: str
+    data_match_relation: str = "NONE"
 
     expected_purpose: str
     declared_purpose: str

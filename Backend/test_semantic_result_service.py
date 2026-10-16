@@ -35,6 +35,7 @@ def test_semantic_result_contains_explanation():
     assert result["declared_purpose"] == "advertising"
 
     assert result["fdo_status"] == "FDO"
-    assert result["confidence"] == 0.80
+    assert result["confidence"] == 0.85
+    assert result["data_match_relation"] == "NARROWER_EVIDENCE"
 
     assert result["reason"]

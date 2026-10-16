@@ -26,7 +26,16 @@ def save_explanation(
     explanation = Explanation(
         explanation_id=explanation_id,
         result_id=result_id,
-        explanation_text=decision.decision_reason,
+        explanation_text=(
+            f"{decision.decision_reason} "
+            "Data-type relation: "
+            f"{getattr(decision, 'data_match_relation', 'NONE')}."
+        ),
+        data_match_relation=getattr(
+            decision,
+            "data_match_relation",
+            "NONE",
+        ),
         evidence_summary=evidence_summary,
         limitations=limitations,
         created_at=datetime.now(

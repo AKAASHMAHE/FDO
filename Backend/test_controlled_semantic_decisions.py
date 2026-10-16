@@ -23,7 +23,7 @@ def test_semantic_not_fdo_when_declared_data_matches_expected_purpose():
     assert 0.0 <= decision.decision_confidence <= 1.0
 
 
-def test_semantic_fdo_when_declared_context_does_not_match_expected():
+def test_semantic_ambiguous_when_declared_purpose_is_unclassified():
     finding = {
         "application": "http://example.org/fdo#resource/application/NAV-01",
         "function": "Navigation",
@@ -37,13 +37,13 @@ def test_semantic_fdo_when_declared_context_does_not_match_expected():
 
     decision = decide_semantic_finding(finding)
 
-    assert decision.fdo_status == "FDO"
+    assert decision.fdo_status == "AMBIGUOUS"
     assert decision.decision_reason
     assert decision.decision_confidence is not None
     assert 0.0 <= decision.decision_confidence <= 1.0
 
 
-def test_semantic_fdo_when_declared_context_is_unclear():
+def test_semantic_ambiguous_when_declared_context_is_unclear():
     finding = {
         "application": "http://example.org/fdo#resource/application/NAV-01",
         "function": "Navigation",
@@ -57,5 +57,5 @@ def test_semantic_fdo_when_declared_context_is_unclear():
 
     decision = decide_semantic_finding(finding)
 
-    assert decision.fdo_status == "FDO"
+    assert decision.fdo_status == "AMBIGUOUS"
     assert decision.decision_reason

@@ -74,9 +74,9 @@ def test_db_semantic_result_service_real_db(
             )
 
             assert result["application"]
-            assert result["function"]
+            assert "function" in result
             assert result["expected_data"]
-            assert result["declared_data"]
+            assert "declared_data" in result
 
             assert result["fdo_status"] in {
                 "FDO",

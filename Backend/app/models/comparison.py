@@ -32,6 +32,12 @@ class Comparison(Base):
         nullable=False,
     )
 
+    data_match_relation: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+        default="NONE",
+    )
+
     purpose_compatibility: Mapped[str] = mapped_column(
         String(50),
         nullable=False,

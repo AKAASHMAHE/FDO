@@ -1,0 +1,11 @@
+﻿application_id,application,policy_id,stored_text_chars,stored_text_status,extraction_method,gemini_attempted,gemini_error_type,new_evidence_rows
+COM-01,WhatsApp,POL-COM-01,81,NOT_CAPTURED,regex fallback,True,,0
+COM-02,Telegram,POL-COM-02,81,NOT_CAPTURED,regex fallback,True,ServerError,0
+ECO-02,eBay,POL-ECO-02,81,NOT_CAPTURED,regex fallback,True,,0
+EDU-01,Google Classroom,POL-EDU-01,81,NOT_CAPTURED,regex fallback,True,,0
+FIN-01,PayPal,POL-FIN-01,81,NOT_CAPTURED,regex fallback,True,,0
+FIN-02,Google Pay,POL-FIN-02,81,NOT_CAPTURED,regex fallback,True,ServerError,0
+HEA-01,MyChart,POL-HEA-01,81,NOT_CAPTURED,regex fallback,True,ServerError,0
+NAV-02,Waze,POL-NAV-02,107,PENDING_CAPTURE,regex fallback,True,,0
+SOC-02,Reddit,POL-SOC-02,81,NOT_CAPTURED,regex fallback,True,,0
+STR-02,YouTube,POL-STR-02,81,NOT_CAPTURED,regex fallback,True,ServerError,0

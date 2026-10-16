@@ -11,10 +11,11 @@ def test_fuseki_semantic_finding_reaches_existing_decision_engine():
     decision = decisions[0]
 
     assert decision.fdo_status == "FDO"
-    assert decision.decision_confidence == 0.80
+    assert decision.decision_confidence == 0.85
+    assert decision.data_match_relation == "NARROWER_EVIDENCE"
 
     reason = decision.decision_reason.lower()
 
-    assert "declared data type" in reason
-    assert "expected functional data type" in reason
-    assert "evaluated function" in reason
+    assert "purpose is incompatible" in reason
+    assert "matched via narrower type" in reason
+    assert reason.count("matched via narrower type") == 1

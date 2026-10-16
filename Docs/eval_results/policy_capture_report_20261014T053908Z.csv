@@ -1,0 +1,30 @@
+app,policy_id,status,reason,source_identifier,usable_http_url,final_url,http_status,character_count
+Booking.com,POL-TRV-01,CAPTURED,HTTP response and cleaned text captured,https://www.booking.com/content/privacy.html,true,https://www.booking.com/content/privacy.html,200,74853
+DoorDash,POL-FOD-02,CAPTURED,HTTP response and cleaned text captured,https://about.doordash.com/en-us/privacy,true,https://about.doordash.com/en-us/privacy,200,11667
+Duolingo,POL-EDU-02,NEEDS_MANUAL_CAPTURE,"Cleaned text is only 8 characters (under 2000; likely shell, gate, or incomplete page)",https://www.duolingo.com/privacy,true,https://www.duolingo.com/privacy,200,8
+Google Authenticator,POL-UTL-01,CAPTURED,HTTP response and cleaned text captured,https://policies.google.com/privacy,true,https://policies.google.com/privacy,200,55726
+Google Classroom,POL-EDU-01,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,,false,,,,
+Google Drive,POL-PRO-01,CAPTURED,HTTP response and cleaned text captured,https://policies.google.com/privacy,true,https://policies.google.com/privacy,200,55726
+Google Fit,POL-FIT-02,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,Google Privacy Policy + Google Fit Help,false,,,,
+Google Home,POL-UTL-02,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,Google Home & Nest Privacy Hub,false,,,,
+Google Maps,POL-NAV-01,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,Google Privacy Policy + Product Privacy Guide,false,,,,
+Google Pay,POL-FIN-02,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,,false,,,,
+Google Photos,POL-AMB-01,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,Google Privacy Policy + Google Photos Privacy Hub,false,,,,
+Instagram,POL-SOC-01,NEEDS_MANUAL_CAPTURE,"Cleaned text is only 58 characters (under 2000; likely shell, gate, or incomplete page)",https://privacycenter.instagram.com/policy/,true,https://privacycenter.instagram.com/policy/,200,58
+Microsoft OneDrive,POL-PRO-02,CAPTURED,HTTP response and cleaned text captured,https://www.microsoft.com/en-us/privacy/privacystatement,true,https://www.microsoft.com/en-us/privacy/privacystatement,200,214166
+Minecraft,POL-GAM-02,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,Minecraft Privacy Policy / Microsoft Privacy Statement,false,,,,
+MyChart,POL-HEA-01,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,,false,,,,
+Netflix,POL-STR-01,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,Netflix Help Center,false,,,,
+PUBG MOBILE,POL-GAM-01,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,PUBG MOBILE Privacy Policy linked from official site/store,false,,,,
+PayPal,POL-FIN-01,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,,false,,,,
+Practo,POL-HEA-02,NEEDS_MANUAL_CAPTURE,"Cleaned text is only 972 characters (under 2000; likely shell, gate, or incomplete page)",https://www.practo.com/company/privacy,true,https://www.practo.com/company/privacy,200,972
+Reddit,POL-SOC-02,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,,false,,,,
+Strava,POL-FIT-01,CAPTURED,HTTP response and cleaned text captured,https://www.strava.com/legal/privacy/,true,https://www.strava.com/legal/privacy,200,27632
+Telegram,POL-COM-02,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,,false,,,,
+Uber,POL-TRV-02,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,Uber Data Explainer,false,,,,
+Uber Eats,POL-FOD-01,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,Uber Privacy Overview / Uber Eats data help,false,,,,
+Waze,POL-NAV-02,CAPTURED,HTTP response and cleaned text captured,https://www.waze.com/legal/privacy/,true,https://support.google.com/waze/answer/12075406?dark=0,200,46806
+WeChat,POL-AMB-02,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,WeChat Privacy Protection Guidelines / official privacy source,false,,,,
+WhatsApp,POL-COM-01,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,,false,,,,
+YouTube,POL-STR-02,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,,false,,,,
+eBay,POL-ECO-02,NEEDS_MANUAL_CAPTURE,Stored source is absent/invalid; suggestion needs confirmation,,false,,,,

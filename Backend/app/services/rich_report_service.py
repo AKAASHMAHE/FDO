@@ -132,6 +132,7 @@ def build_rich_analysis_report(
                 ),
 
                 "data_match": comparison.data_match,
+                "data_match_relation": comparison.data_match_relation,
 
                 "purpose_compatibility": (
                     comparison.purpose_compatibility

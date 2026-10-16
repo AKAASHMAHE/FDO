@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from app.services.data_type_hierarchy import data_type_relation
+
 PURPOSE_CATEGORIES = {
     "NAVIGATION": {
         "navigation",
@@ -9,6 +11,16 @@ PURPOSE_CATEGORIES = {
         "turn by turn directions",
         "nearby search",
         "finding nearby places",
+        "live trip tracking",
+        "live delivery tracking",
+        "real time traffic",
+        "traffic road guidance",
+        "pickup routing",
+        "delivery address and shipping calculation",
+        "determine user position and provide real time navigation",
+        "automatic arrival check in",
+        "real time traffic navigation",
+        "route navigation",
     },
     "COMMUNICATION": {
         "messaging",
@@ -17,12 +29,36 @@ PURPOSE_CATEGORIES = {
         "calls",
         "communication",
         "contacting users",
+        "chat",
+        "core messaging",
+        "direct messaging",
+        "medical communication",
+        "video call",
+        "video calling",
+        "video consultation",
+        "video meeting",
+        "video visit",
+        "voice call",
+        "voice command",
+        "voice video calling",
+        "communication collaboration",
+        "recipient identification",
     },
     "SOCIAL_INTERACTION": {
         "social interaction",
         "sharing",
         "connecting with friends",
         "social networking",
+        "friend team discovery",
+        "contact discovery and connection",
+        "content posting",
+        "social posting",
+        "commenting",
+        "posting",
+        "media sharing",
+        "media file sharing",
+        "location sharing",
+        "social challenges",
     },
     "ACCOUNT_MANAGEMENT": {
         "account creation",
@@ -31,6 +67,15 @@ PURPOSE_CATEGORIES = {
         "login",
         "sign in",
         "user account",
+        "one time authentication",
+        "player account identification",
+        "player identification matchmaking",
+        "user identification and account management",
+        "user authentication and profile management",
+        "authenticate users and manage profile access",
+        "user authentication for cross device sync services",
+        "user authentication for cross device synchronization",
+        "user authentication and profile synchronization",
     },
     "PAYMENT_PROCESSING": {
         "payments",
@@ -38,20 +83,50 @@ PURPOSE_CATEGORIES = {
         "transactions",
         "purchases",
         "processing payments",
+        "payment transaction",
+        "bill payment",
+        "purchase transaction",
+        "shopping cart",
+        "transaction",
+        "payment processing and order settlement",
     },
     "MEDIA": {
         "media",
         "video",
         "videos",
+        "func.com.video",
         "music",
         "playing media",
         "media content",
+        "video playback",
+        "offline viewing",
+        "photo video management",
+        "editing",
     },
     "SEARCH": {
         "search",
         "searching",
         "finding information",
         "querying content",
+        "search discovery",
+        "search organization",
+        "search history and preferences",
+        "browsing history and cache management",
+        "managing browsing history cache and cookies",
+        "browsing history",
+        "search personalization",
+        "localized search",
+        "localized restaurant discovery",
+        "provider discovery",
+        "contextualize local search results",
+        "fulfill website geolocation requests",
+    },
+    "SEARCH_LOCATION": {
+        "localization",
+        "localized",
+        "location based",
+        "search localization",
+        "sync saved locations and preferences across devices",
     },
     "SECURITY": {
         "security",
@@ -59,6 +134,9 @@ PURPOSE_CATEGORIES = {
         "abuse prevention",
         "protecting accounts",
         "account security",
+        "security fraud protection",
+        "security verification",
+        "verification",
     },
     "SERVICE_OPERATION": {
         "providing the service",
@@ -66,6 +144,16 @@ PURPOSE_CATEGORIES = {
         "operating the application",
         "maintaining functionality",
         "service functionality",
+        "local offline file access",
+        "offline local file access",
+        "device identification for rendering and network communication",
+        "device identification for network requests and webpage rendering compatibility",
+        "hardware and os identification for rendering and network requests",
+        "appointment booking",
+        "booking confirmation",
+        "scheduling care",
+        "delivery",
+        "process user uploaded pdf and document files",
     },
     "ANALYTICS": {
         "analytics",
@@ -80,6 +168,7 @@ PURPOSE_CATEGORIES = {
         "customized experience",
         "recommendations",
         "personalized recommendations",
+        "personalization coaching",
     },
     "ADVERTISING": {
         "advertising",
@@ -93,6 +182,45 @@ PURPOSE_CATEGORIES = {
         "promotional communications",
         "promotions",
         "promotional purposes",
+    },
+    "HEALTHCARE": {
+        "health metrics",
+        "view health information",
+        "health care",
+        "provider discovery",
+        "medical communication",
+    },
+    "GAMING": {
+        "gameplay",
+        "player identification",
+        "matchmaking",
+    },
+    "FILE_STORAGE_SYNC": {
+        "file storage sync",
+        "backup sync",
+        "backup synchronization",
+        "sync saved locations and preferences across devices",
+    },
+    "DEVICE_CONTROL": {
+        "device control",
+        "device orientation and hardware sensor integration",
+    },
+    "ACTIVITY_TRACKING": {
+        "activity tracking",
+        "gps activity tracking",
+        "progress tracking",
+        "learning activity",
+        "assignment classwork",
+    },
+    "FITNESS_TRACKING": {
+        "fitness tracking",
+        "health metrics",
+        "view health information",
+    },
+    "EDUCATION": {
+        "assignment classwork",
+        "learning activity",
+        "lesson activity",
     },
 }
 
@@ -119,6 +247,7 @@ class ComparisonOutput:
     declared_evidence_id: str | None
 
     data_match: str
+    data_match_relation: str
     purpose_compatibility: str
     functional_relationship: str
     functional_justification: str
@@ -162,6 +291,7 @@ def evaluate_data_match(
 
     Returns:
         EXACT_MATCH
+        HIERARCHICAL_MATCH
         NO_MATCH
         NO_EVIDENCE
     """
@@ -169,8 +299,14 @@ def evaluate_data_match(
     if not declared_data_type:
         return "NO_EVIDENCE"
 
-    if expected_data_type == declared_data_type:
+    relation = data_type_relation(
+        expected_data_type,
+        declared_data_type,
+    )
+    if relation == "EXACT":
         return "EXACT_MATCH"
+    if relation:
+        return "HIERARCHICAL_MATCH"
 
     return "NO_MATCH"
 def normalize_purpose(purpose: str | None) -> str:
@@ -227,12 +363,13 @@ def classify_purpose(purpose: str | None) -> str | None:
     if not normalized:
         return None
 
-    for category, phrases in PURPOSE_CATEGORIES.items():
-        for phrase in phrases:
-            if phrase in normalized:
-                return category
-
-    return None
+    matches = [
+        (len(phrase), -normalized.find(phrase), category)
+        for category, phrases in PURPOSE_CATEGORIES.items()
+        for phrase in phrases
+        if phrase in normalized
+    ]
+    return max(matches)[2] if matches else None
 
 
 def classify_purposes(purpose: str | None) -> list[str]:
@@ -322,9 +459,7 @@ def evaluate_purpose_compatibility(
     Supports multiple declared purpose categories.
 
     Returns:
-        COMPATIBLE
-        INCOMPATIBLE
-        NO_EVIDENCE
+        COMPATIBLE, INCOMPATIBLE, UNKNOWN, or NO_EVIDENCE.
     """
 
     if not declared_purpose:
@@ -336,25 +471,26 @@ def evaluate_purpose_compatibility(
     if not expected or not declared:
         return "NO_EVIDENCE"
 
-    # Preserve exact-match behavior.
-    if expected == declared:
-        return "COMPATIBLE"
-
-    # Classify the expected purpose.
-    expected_category = classify_purpose(expected)
+    expected_categories = classify_purposes(expected)
 
     # Classify all declared purposes.
     declared_categories = classify_purposes(declared)
 
-    # If either side cannot be classified,
-    # remain conservative.
-    if not expected_category or not declared_categories:
-        return "INCOMPATIBLE"
+    # If either side cannot be classified, compatibility is unknown.
+    if not expected_categories or not declared_categories:
+        return "UNKNOWN"
+
+    # Preserve exact-match behavior after confirming both purposes are known.
+    if expected == declared:
+        return "COMPATIBLE"
 
     # Multi-purpose compatibility:
     # at least one declared purpose category matching
     # the expected purpose category is sufficient.
-    if expected_category in declared_categories:
+    if any(
+        category in declared_categories
+        for category in expected_categories
+    ):
         return "COMPATIBLE"
 
     return "INCOMPATIBLE"
@@ -443,6 +579,10 @@ def build_comparison(
         expected.data_type,
         evidence.data_type if evidence else None,
     )
+    relation = data_type_relation(
+        expected.data_type,
+        evidence.data_type if evidence else None,
+    )
 
     purpose_compatibility = evaluate_purpose_compatibility(
         expected.expected_purpose,
@@ -474,6 +614,7 @@ def build_comparison(
             evidence.evidence_id if evidence else None
         ),
         data_match=data_match,
+        data_match_relation=relation or "NONE",
         purpose_compatibility=purpose_compatibility,
         functional_relationship=functional_relationship,
         functional_justification=justification,

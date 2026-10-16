@@ -1,0 +1,20 @@
+path,confirmed_database_action,classification,required_isolation,change_status
+Backend/test_api_semantic_get_persistence.py,POST /api/v1/analyze persists runtime policy analysis semantic results and commits,CONFIRMED_PRIMARY_DB_WRITER,Temporary SQLite via isolated_app_database fixture,Updated: isolated_app_database fixture
+Backend/test_api_semantic_plural_get.py,POST /api/v1/analyze persists runtime policy analysis semantic results and commits,CONFIRMED_PRIMARY_DB_WRITER,Temporary SQLite via isolated_app_database fixture,Updated: isolated_app_database fixture
+Backend/test_api_semantic_integration.py,POST /api/v1/analyze persists runtime policy analysis semantic results and commits,CONFIRMED_PRIMARY_DB_WRITER,Temporary SQLite via isolated_app_database fixture,Updated: isolated_app_database fixture
+Backend/test_end_to_end_semantic_analysis.py,POST /api/v1/analyze persists runtime policy analysis semantic results and commits,CONFIRMED_PRIMARY_DB_WRITER,Temporary SQLite via isolated_app_database fixture,Updated: isolated_app_database fixture
+Backend/test_end_to_end_semantic_persistence.py,POST /api/v1/analyze persists runtime policy analysis semantic results and commits,CONFIRMED_PRIMARY_DB_WRITER,Temporary SQLite via isolated_app_database fixture,Updated: isolated_app_database fixture
+Backend/test_rich_report_semantic.py,POST /api/v1/analyze persists runtime policy analysis semantic results and commits,CONFIRMED_PRIMARY_DB_WRITER,Temporary SQLite via isolated_app_database fixture,Updated: isolated_app_database fixture
+Backend/test_semantic_database_verification.py,POST /api/v1/analyze persists runtime policy analysis semantic results and commits; test queries persisted semantic_fdo_results,CONFIRMED_PRIMARY_DB_WRITER,Temporary SQLite via isolated_app_database fixture,Updated: isolated_app_database fixture
+Backend/test_semantic_relational_consistency.py,POST /api/v1/analyze persists runtime policy analysis semantic results and commits,CONFIRMED_PRIMARY_DB_WRITER,Temporary SQLite via isolated_app_database fixture,Updated: isolated_app_database fixture
+Backend/test_semantic_result_repository.py,SessionLocal repository.save_results then db.commit; cleanup DELETE then db.commit,CONFIRMED_PRIMARY_DB_WRITER,Temporary SQLite via isolated_app_database fixture,Updated: isolated_app_database fixture
+Backend/test_db_semantic_repository.py,SessionLocal reads only; no commit or write operation,READ_ONLY_DATABASE_TEST,No write isolation required,No change
+Backend/test_db_semantic_result_service.py,SessionLocal reads records; semantic service writes Fuseki graph and a temporary TTL file but does not commit database rows,READ_ONLY_DATABASE_TEST,No write isolation required,No change
+Backend/test_db_semantic_result_service_integration.py,SessionLocal reads records; semantic service writes Fuseki graph and a temporary TTL file but does not commit database rows,READ_ONLY_DATABASE_TEST,No write isolation required,No change
+Backend/test_orm_to_rdf.py,SessionLocal reads ORM rows to create in-memory RDF graph,READ_ONLY_DATABASE_TEST,No write isolation required,No change
+Backend/test_policy_evidence_to_rdf.py,SessionLocal reads policy evidence to create in-memory RDF graph,READ_ONLY_DATABASE_TEST,No write isolation required,No change
+Backend/test_real_db_semantic_decision.py,SessionLocal reads ORM rows; writes to Fuseki not SQLite,READ_ONLY_DATABASE_TEST,No SQLite write isolation required,No change
+Backend/test_real_db_to_fuseki_semantic.py,SessionLocal reads ORM rows; writes to Fuseki not SQLite,READ_ONLY_DATABASE_TEST,No SQLite write isolation required,No change
+Backend/test_purpose_normalization.py,Direct SQLite query only; no insert update delete or commit,READ_ONLY_DATABASE_TEST,No write isolation required,No change
+Backend/test_data_type_hierarchy.py,Opens Backend/fdo_privacy.db with mode=ro and queries only,READ_ONLY_DATABASE_TEST,No write isolation required,No change
+Backend/scripts/test_failure_path.py,Attempts failing analysis and explicitly rolls back before querying,ROLLBACK_ONLY_SCRIPT,No committed write observed,No change

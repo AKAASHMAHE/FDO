@@ -6,6 +6,7 @@ from test_helpers import fake_google_maps_baseline
 
 def test_rich_report_contains_semantic_explanations(
     monkeypatch,
+    isolated_app_database,
 ):
     fake_evidence = [
         {

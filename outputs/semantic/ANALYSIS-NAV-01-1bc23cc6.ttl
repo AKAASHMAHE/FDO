@@ -1,0 +1,260 @@
+@prefix fdo: <http://example.org/fdo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+fdo:AncillaryData a owl:Class .
+
+fdo:DataType_DATA_ACCOUNT_GOOGLE a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_ACCOUNT .
+
+fdo:DataType_DATA_ACCOUNT_PERSONAL_INFO a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_ACCOUNT .
+
+fdo:DataType_DATA_ACCOUNT_USER_ID a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_ACCOUNT .
+
+fdo:DataType_DATA_AUTH_SECRET_KEY a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_AUTH .
+
+fdo:DataType_DATA_COMM_MESSAGE_CONTENT a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_COMM .
+
+fdo:DataType_DATA_CONTACTS_LIST a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_CONTACTS .
+
+fdo:DataType_DATA_CONTACT_ADDRESS a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_CONTACT .
+
+fdo:DataType_DATA_CONTACT_EMAIL a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_CONTACT .
+
+fdo:DataType_DATA_CONTACT_EMAIL_PHONE_USERNAME a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_CONTACT .
+
+fdo:DataType_DATA_CONTACT_PHONE a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_CONTACT .
+
+fdo:DataType_DATA_CONTACT_PHONE_EMAIL a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_CONTACT .
+
+fdo:DataType_DATA_DEVICE_ID a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_DEVICE .
+
+fdo:DataType_DATA_DEVICE_SENSOR a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_DEVICE .
+
+fdo:DataType_DATA_DEVICE_SMART_HOME a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_DEVICE .
+
+fdo:DataType_DATA_DEVICE_STORAGE a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_DEVICE .
+
+fdo:DataType_DATA_FILE_USER_FILES a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_FILE .
+
+fdo:DataType_DATA_FINANCIAL_PAYMENT a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_FINANCIAL .
+
+fdo:DataType_DATA_FINANCIAL_TRANSACTION a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_FINANCIAL .
+
+fdo:DataType_DATA_GAMING_GAMEPLAY a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_GAMING .
+
+fdo:DataType_DATA_HEALTH_ACTIVITY a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_HEALTH .
+
+fdo:DataType_DATA_HEALTH_APPOINTMENT a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_HEALTH .
+
+fdo:DataType_DATA_HEALTH_HEART_RATE a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_HEALTH .
+
+fdo:DataType_DATA_HEALTH_PERSONAL_HEALTH a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_HEALTH .
+
+fdo:DataType_DATA_HEALTH_PROVIDER_PREFERENCES a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_HEALTH .
+
+fdo:DataType_DATA_HEALTH_RECORD a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_HEALTH .
+
+fdo:DataType_DATA_HEALTH_VITALS a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_HEALTH .
+
+fdo:DataType_DATA_MEDIA_AUDIO_VIDEO a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_MEDIA .
+
+fdo:DataType_DATA_MEDIA_CAMERA a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_MEDIA .
+
+fdo:DataType_DATA_MEDIA_MICROPHONE a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_MEDIA .
+
+fdo:DataType_DATA_MEDIA_PHOTO a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_MEDIA .
+
+fdo:DataType_DATA_MEDIA_PHOTOS_VIDEOS a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_MEDIA .
+
+fdo:DataType_DATA_MEDIA_VIDEO a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_MEDIA .
+
+fdo:DataType_DATA_OTHER a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA .
+
+fdo:DataType_DATA_USAGE_ACTIVITY_HISTORY a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_USAGE .
+
+fdo:DataType_DATA_USAGE_ACTIVITY_LOGS a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_USAGE .
+
+fdo:DataType_DATA_USAGE_ASSIGNMENT_CONTENT a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_USAGE .
+
+fdo:DataType_DATA_USAGE_CART_ACTIVITY a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_USAGE .
+
+fdo:DataType_DATA_USAGE_COMMENT_CONTENT a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_USAGE .
+
+fdo:DataType_DATA_USAGE_LESSON_ACTIVITY a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_USAGE .
+
+fdo:DataType_DATA_USAGE_PLAYBACK_ACTIVITY a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_USAGE .
+
+fdo:DataType_DATA_USAGE_POST_CONTENT a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_USAGE .
+
+fdo:DataType_DATA_USAGE_PROGRESS_RECORDS a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_USAGE .
+
+fdo:DataType_DATA_USAGE_SEARCH_HISTORY a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_USAGE .
+
+fdo:DataType_DATA_USAGE_TRIP_DETAILS a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_USAGE .
+
+fdo:DataType_DATA_USAGE_WATCH_HISTORY a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_USAGE .
+
+fdo:PersonalData a owl:Class ;
+    rdfs:subClassOf fdo:DataType .
+
+fdo:DataType_DATA_AUTH a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA .
+
+fdo:DataType_DATA_COMM a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA .
+
+fdo:DataType_DATA_CONTACTS a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA .
+
+fdo:DataType_DATA_FILE a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA .
+
+fdo:DataType_DATA_GAMING a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA .
+
+fdo:DataType_DATA_LOCATION_APPROXIMATE a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_LOCATION .
+
+<http://example.org/fdo#resource/application/NAV-01> a fdo:Application ;
+    fdo:category "Navigation" ;
+    fdo:declaredData <http://example.org/fdo#resource/declared-data/AI-9b331808> ;
+    fdo:id "NAV-01" ;
+    fdo:name "Google Maps" ;
+    fdo:performsFunction <http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.SEARCH>,
+        <http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.TRAFFIC>,
+        <http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.TURNBYTURN> .
+
+<http://example.org/fdo#resource/declared-data/AI-9b331808> a fdo:DeclaredData ;
+    fdo:confidence "0.95"^^xsd:float ;
+    fdo:dataType "DATA.LOCATION.PRECISE" ;
+    fdo:dataTypeClass fdo:DataType_DATA_LOCATION_PRECISE ;
+    fdo:declaredByApplication <http://example.org/fdo#resource/application/NAV-01> ;
+    fdo:entity "third_party_advertiser" ;
+    fdo:extractionStatus "EXTRACTED" ;
+    fdo:id "AI-9b331808" ;
+    fdo:name "DATA.LOCATION.PRECISE" ;
+    fdo:purpose "advertising" ;
+    fdo:retention "30 days" ;
+    fdo:sharing "shared" ;
+    fdo:text "The application may collect precise location information for advertising purposes." .
+
+<http://example.org/fdo#resource/expected-data/EXP-015> a fdo:ExpectedData ;
+    fdo:dataType "DATA.LOCATION.PRECISE" ;
+    fdo:dataTypeClass fdo:DataType_DATA_LOCATION_PRECISE ;
+    fdo:expectedForFunction <http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.TURNBYTURN> ;
+    fdo:id "EXP-015" ;
+    fdo:name "DATA.LOCATION.PRECISE" ;
+    fdo:necessity "L1_REQUIRED" ;
+    fdo:purpose "Route/navigation" .
+
+<http://example.org/fdo#resource/expected-data/EXP-016> a fdo:ExpectedData ;
+    fdo:dataType "DATA.LOCATION.PRECISE" ;
+    fdo:dataTypeClass fdo:DataType_DATA_LOCATION_PRECISE ;
+    fdo:expectedForFunction <http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.TRAFFIC> ;
+    fdo:id "EXP-016" ;
+    fdo:name "DATA.LOCATION.PRECISE" ;
+    fdo:necessity "L1_REQUIRED" ;
+    fdo:purpose "Real-time traffic/navigation" .
+
+<http://example.org/fdo#resource/expected-data/EXP-017> a fdo:ExpectedData ;
+    fdo:dataType "DATA.LOCATION.APPROXIMATE" ;
+    fdo:dataTypeClass fdo:DataType_DATA_LOCATION_APPROXIMATE ;
+    fdo:expectedForFunction <http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.SEARCH> ;
+    fdo:id "EXP-017" ;
+    fdo:name "DATA.LOCATION.APPROXIMATE" ;
+    fdo:necessity "L2_SUPPORTIVE" ;
+    fdo:purpose "Search/localization" .
+
+fdo:DataType a owl:Class .
+
+fdo:DataType_DATA_FINANCIAL a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA .
+
+fdo:DataType_DATA_LOCATION a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA .
+
+<http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.SEARCH> a fdo:Function ;
+    fdo:expectedData <http://example.org/fdo#resource/expected-data/EXP-017> ;
+    fdo:id "NAV-01:FUNC.NAV.SEARCH" ;
+    fdo:name "Location search" .
+
+<http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.TRAFFIC> a fdo:Function ;
+    fdo:expectedData <http://example.org/fdo#resource/expected-data/EXP-016> ;
+    fdo:id "NAV-01:FUNC.NAV.TRAFFIC" ;
+    fdo:name "Traffic information" .
+
+<http://example.org/fdo#resource/function/NAV-01:FUNC.NAV.TURNBYTURN> a fdo:Function ;
+    fdo:expectedData <http://example.org/fdo#resource/expected-data/EXP-015> ;
+    fdo:id "NAV-01:FUNC.NAV.TURNBYTURN" ;
+    fdo:name "Turn-by-turn navigation" .
+
+fdo:DataType_DATA_ACCOUNT a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA .
+
+fdo:DataType_DATA_LOCATION_PRECISE a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA_LOCATION .
+
+fdo:DataType_DATA_DEVICE a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA .
+
+fdo:DataType_DATA_CONTACT a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA .
+
+fdo:DataType_DATA_MEDIA a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA .
+
+fdo:DataType_DATA_HEALTH a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA .
+
+fdo:DataType_DATA_USAGE a owl:Class ;
+    rdfs:subClassOf fdo:DataType_DATA .
+
+fdo:DataType_DATA a owl:Class ;
+    rdfs:subClassOf fdo:DataType .
+

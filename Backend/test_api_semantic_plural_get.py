@@ -6,6 +6,7 @@ from test_helpers import fake_google_maps_baseline
 
 def test_plural_analysis_get_returns_persisted_semantic_results(
     monkeypatch,
+    isolated_app_database,
 ):
     fake_evidence = [
         {

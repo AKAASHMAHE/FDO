@@ -4,19 +4,22 @@ from app.ontology.semantic_decision_adapter import (
 )
 
 
-def test_semantic_finding_maps_to_no_match():
+def test_semantic_finding_maps_to_narrower_hierarchical_match():
     finding = {
         "expected_data": "location",
         "declared_data": "location",
         "expected_type": "location",
         "declared_type": "precise_location",
+        "declared_id": "declared-location",
+        "extraction_status": "EXTRACTED",
         "expected_purpose": "navigation",
         "declared_purpose": "advertising",
     }
 
     decision_input = semantic_finding_to_decision_input(finding)
 
-    assert decision_input.data_match == "NO_MATCH"
+    assert decision_input.data_match == "HIERARCHICAL_MATCH"
+    assert decision_input.data_match_relation == "NARROWER_EVIDENCE"
     assert decision_input.purpose_compatibility == "INCOMPATIBLE"
     assert decision_input.functional_relationship == "RELATED"
     assert decision_input.evidence_status == "EXTRACTED"
@@ -28,6 +31,8 @@ def test_semantic_finding_reaches_existing_fdo_engine():
         "declared_data": "location",
         "expected_type": "location",
         "declared_type": "precise_location",
+        "declared_id": "declared-location",
+        "extraction_status": "EXTRACTED",
         "expected_purpose": "navigation",
         "declared_purpose": "advertising",
     }
@@ -35,7 +40,9 @@ def test_semantic_finding_reaches_existing_fdo_engine():
     decision = decide_semantic_finding(finding)
 
     assert decision.fdo_status == "FDO"
-    assert decision.decision_confidence == 0.80
+    assert decision.decision_confidence == 0.85
+    assert decision.data_match_relation == "NARROWER_EVIDENCE"
+    assert "matched via narrower type" in decision.decision_reason.lower()
 
 
 def test_matching_semantic_data_reaches_not_fdo():
@@ -44,6 +51,8 @@ def test_matching_semantic_data_reaches_not_fdo():
         "declared_data": "phone-number",
         "expected_type": "phone_number",
         "declared_type": "phone_number",
+        "declared_id": "declared-phone",
+        "extraction_status": "EXTRACTED",
         "expected_purpose": "communication",
         "declared_purpose": "communication",
     }

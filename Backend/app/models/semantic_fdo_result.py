@@ -52,6 +52,12 @@ class SemanticFDOResult(Base):
         nullable=False,
     )
 
+    data_match_relation: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+        default="NONE",
+    )
+
     expected_purpose: Mapped[str] = mapped_column(
         Text,
         nullable=False,

@@ -4,7 +4,10 @@ from app.main import app
 from test_helpers import fake_google_maps_baseline
 
 
-def test_end_to_end_semantic_persistence(monkeypatch):
+def test_end_to_end_semantic_persistence(
+    monkeypatch,
+    isolated_app_database,
+):
     fake_evidence = [
         {
             "data_type": "DATA.LOCATION.PRECISE",

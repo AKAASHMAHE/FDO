@@ -3,7 +3,10 @@ from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 
 from app.models.analysis import Analysis
+from app.models.overreach_candidate import OverreachCandidate
 from app.models.policy_document import PolicyDocument
+from app.models.policy_evidence import PolicyEvidence
+from sqlalchemy import select
 
 from app.services.application_service import (
     get_application,
@@ -19,6 +22,9 @@ from app.services.policy_service import (
 
 from app.services.comparison_service import (
     build_comparison,
+    classify_purpose_compatibility,
+    evaluate_evidence_status,
+    evaluate_functional_relationship,
 )
 
 from app.services.comparison_persistence_service import (
@@ -41,6 +47,8 @@ from app.services.result_service import (
 from app.services.evidence_matcher import (
     find_best_matching_evidence,
 )
+from app.services.data_type_hierarchy import data_type_relation
+from app.services.ancillary_baseline import is_ancillary_declaration
 
 
 def run_analysis(
@@ -196,6 +204,9 @@ def run_analysis(
                 evidence_status=(
                     comparison.evidence_status
                 ),
+                data_match_relation=(
+                    comparison.data_match_relation
+                ),
             )
 
             decision = evaluate_fdo_decision(
@@ -245,7 +256,136 @@ def run_analysis(
                 analysis.ambiguous_count += 1
 
         # ---------------------------------------------------------
-        # 6. Validate counters
+        # 6. Reverse-scan declarations not covered by expectations
+        # ---------------------------------------------------------
+
+        evidence_rows = session.scalars(
+            select(PolicyEvidence)
+            .where(PolicyEvidence.policy_id == policy.policy_id)
+            .order_by(PolicyEvidence.evidence_id)
+        )
+        expected_types = [
+            expected.data_type
+            for expected in expected_mappings
+        ]
+
+        for evidence in evidence_rows:
+            if not evidence.data_type:
+                continue
+
+            if any(
+                data_type_relation(expected_type, evidence.data_type)
+                for expected_type in expected_types
+            ):
+                continue
+            if is_ancillary_declaration(
+                evidence.data_type,
+                evidence.purpose,
+            ):
+                evidence_status = evaluate_evidence_status(
+                    evidence.evidence_id,
+                    evidence.extraction_status,
+                )
+                decision = evaluate_fdo_decision(
+                    FDODecisionInput(
+                        expected_id=f"OVERREACH:{evidence.evidence_id}",
+                        application_id=application_id,
+                        expected_data_type="",
+                        expected_necessity="UNKNOWN",
+                        expected_purpose="",
+                        declared_evidence_id=evidence.evidence_id,
+                        declared_data_type=evidence.data_type,
+                        declared_purpose=evidence.purpose,
+                        data_match="ANCILLARY",
+                        purpose_compatibility="ANCILLARY",
+                        functional_relationship="RELATED",
+                        evidence_status=evidence_status,
+                        is_uncovered_declaration=True,
+                    )
+                )
+                session.add(
+                    OverreachCandidate(
+                        candidate_id=(
+                            f"{analysis_id}:OVERREACH:{evidence.evidence_id}"
+                        ),
+                        analysis_id=analysis.analysis_id,
+                        application_id=application_id,
+                        evidence_id=evidence.evidence_id,
+                        data_type=evidence.data_type,
+                        data_match="ANCILLARY",
+                        data_match_relation="NONE",
+                        purpose_compatibility="ANCILLARY",
+                        functional_relationship="RELATED",
+                        evidence_status=evidence_status,
+                        fdo_status=decision.fdo_status,
+                        decision_reason=decision.decision_reason,
+                        decision_confidence=decision.decision_confidence,
+                    )
+                )
+                continue
+
+            # An orphan declaration has no single expected mapping; compare
+            # its purpose against all app purposes and accept any compatible one.
+            purpose_results = [
+                classify_purpose_compatibility(
+                    expected.expected_purpose,
+                    evidence.purpose,
+                )
+                for expected in expected_mappings
+            ]
+            if "COMPATIBLE" in purpose_results:
+                purpose_compatibility = "COMPATIBLE"
+            elif "UNKNOWN" in purpose_results or not purpose_results:
+                purpose_compatibility = "UNKNOWN"
+            else:
+                purpose_compatibility = "INCOMPATIBLE"
+
+            evidence_status = evaluate_evidence_status(
+                evidence.evidence_id,
+                evidence.extraction_status,
+            )
+            functional_relationship = evaluate_functional_relationship(
+                evidence.evidence_id,
+            )
+            decision = evaluate_fdo_decision(
+                FDODecisionInput(
+                    expected_id=f"OVERREACH:{evidence.evidence_id}",
+                    application_id=application_id,
+                    expected_data_type="",
+                    expected_necessity="UNKNOWN",
+                    expected_purpose="",
+                    declared_evidence_id=evidence.evidence_id,
+                    declared_data_type=evidence.data_type,
+                    declared_purpose=evidence.purpose,
+                    data_match="NO_MATCH",
+                    purpose_compatibility=purpose_compatibility,
+                    functional_relationship=functional_relationship,
+                    evidence_status=evidence_status,
+                    is_uncovered_declaration=True,
+                )
+            )
+            session.add(
+                OverreachCandidate(
+                    candidate_id=(
+                        f"{analysis_id}:OVERREACH:{evidence.evidence_id}"
+                    ),
+                    analysis_id=analysis.analysis_id,
+                    application_id=application_id,
+                    evidence_id=evidence.evidence_id,
+                    data_type=evidence.data_type,
+                    data_match="NO_MATCH",
+                    data_match_relation="NONE",
+                    purpose_compatibility=purpose_compatibility,
+                    functional_relationship=functional_relationship,
+                    evidence_status=evidence_status,
+                    fdo_status=decision.fdo_status,
+                    decision_reason=decision.decision_reason,
+                    decision_confidence=decision.decision_confidence,
+                )
+            )
+
+        # ---------------------------------------------------------
+        # 7. Validate expected-mapping counters
         # ---------------------------------------------------------
 
         classified = (
@@ -262,7 +402,7 @@ def run_analysis(
             )
 
         # ---------------------------------------------------------
-        # 7. Complete analysis
+        # 8. Complete analysis
         # ---------------------------------------------------------
 
         analysis.analysis_status = "COMPLETED"

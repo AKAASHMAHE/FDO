@@ -23,6 +23,7 @@ from rdflib import Graph, Literal, RDF, RDFS, OWL, XSD
 
 from .namespace import FDO, FDO_NAMESPACE_URI
 from .specification import get_fdo_specification
+from app.services.data_type_hierarchy import hierarchy_edges
 
 
 def build_fdo_ontology() -> Graph:
@@ -82,6 +83,27 @@ def build_fdo_ontology() -> Graph:
     # ------------------------------------------------------------------
 
     specification = get_fdo_specification()
+    graph.add((FDO.DataType, RDF.type, OWL.Class))
+    graph.add((FDO.DataType, RDFS.label, Literal("DataType")))
+    graph.add(
+        (
+            FDO.DataType,
+            RDFS.comment,
+            Literal("Root class for canonical data-type taxonomy classes."),
+        )
+    )
+    graph.add((FDO.AncillaryData, RDF.type, OWL.Class))
+    graph.add((FDO.AncillaryData, RDFS.label, Literal("AncillaryData")))
+    graph.add(
+        (
+            FDO.AncillaryData,
+            RDFS.comment,
+            Literal(
+                "Declared data types and purposes covered by the "
+                "cross-application ancillary baseline."
+            ),
+        )
+    )
 
     for class_name, class_type in specification.classes.items():
 
@@ -112,6 +134,37 @@ def build_fdo_ontology() -> Graph:
                 ),
             )
         )
+
+    def data_type_class(code: str):
+        if code == "PersonalData":
+            return FDO.PersonalData
+        if code == "DataType":
+            return FDO.DataType
+        return FDO[f"DataType_{code.replace('.', '_')}"]
+
+    for child, parent in hierarchy_edges():
+        child_uri = data_type_class(child)
+        parent_uri = data_type_class(parent)
+        graph.add((child_uri, RDF.type, OWL.Class))
+        graph.add((child_uri, RDFS.label, Literal(child)))
+        graph.add(
+            (
+                child_uri,
+                RDFS.comment,
+                Literal(f"Data type taxonomy class for {child}."),
+            )
+        )
+        graph.add((parent_uri, RDF.type, OWL.Class))
+        if parent != "PersonalData":
+            graph.add((parent_uri, RDFS.label, Literal(parent)))
+            graph.add(
+                (
+                    parent_uri,
+                    RDFS.comment,
+                    Literal(f"Data type taxonomy class for {parent}."),
+                )
+            )
+        graph.add((child_uri, RDFS.subClassOf, parent_uri))
 
     # ------------------------------------------------------------------
     # Object Properties

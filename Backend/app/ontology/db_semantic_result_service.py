@@ -7,10 +7,7 @@ from .db_semantic_repository import DBSemanticRepository
 from .db_rdf_service import DBRDFService
 from .semantic_fuseki_service import SemanticFusekiService
 from .fuseki_semantic_detector import FusekiSemanticDetector
-from .semantic_decision_adapter import decide_semantic_finding
-from app.services.evidence_validation_service import (
-    is_semantic_finding_usable,
-)
+from .semantic_decision_adapter import adapt_semantic_results
 
 
 def deduplicate_semantic_results(
@@ -213,41 +210,13 @@ class DBSemanticResultService:
             self.fuseki_service.fuseki_service
         )
 
-        findings = detector.detect_fdo()
+        covered_rows = detector.detect_covered()
+        uncovered_rows = detector.detect_uncovered()
 
-        results = []
-
-        for finding in findings:
-
-            if not finding["application"].endswith(
-                f"/application/{application_id}"
-            ):
-                continue
-
-            if not is_semantic_finding_usable(finding):
-                continue
-
-            decision = decide_semantic_finding(
-                finding
-            )
-
-            results.append(
-                {
-                    "application_id": application_id,
-                    "application": finding["application"],
-                    "function": finding["function"],
-                    "expected_data": finding["expected_data"],
-                    "declared_data": finding["declared_data"],
-                    "expected_type": finding["expected_type"],
-                    "declared_type": finding["declared_type"],
-                    "expected_purpose": finding["expected_purpose"],
-                    "declared_purpose": finding["declared_purpose"],
-                    "fdo_status": decision.fdo_status,
-                    "confidence": decision.decision_confidence,
-                    "reason": decision.decision_reason,
-                }
-            )
-
-        return group_semantic_result_purposes(
-            deduplicate_semantic_results(results)
+        return adapt_semantic_results(
+            application_id,
+            f"http://example.org/fdo#resource/application/{application_id}",
+            expected_data,
+            covered_rows,
+            uncovered_rows,
         )
