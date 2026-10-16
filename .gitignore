@@ -29,3 +29,7 @@ apache-jena-fuseki-6.2.0/run/logs/
 # Apache Jena Fuseki installation
 apache-jena-fuseki-6.2.0/
 apache-jena-fuseki-6.2.0.zip
+
+Docs/
+
+fdo_privacy.db
